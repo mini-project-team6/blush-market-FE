@@ -7,7 +7,11 @@ export default function LoginForm() {
 
   const loginSubmitHandler = (e) => {
     e.preventDefault();
-    console.log(id, password);
+    const obj = {
+      id,
+      password,
+    };
+    console.log(obj);
     if (!id.trim() || !password.trim()) {
       alert("똑바로 입력 하세요....");
       return;

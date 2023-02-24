@@ -1,14 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import CommentList from "./CommentList";
-import { useQueryClient } from "react-query";
 
 export default function CommentModalContent() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-
-  // const client = useQueryClient();
-
   function handleSubmit(event) {
     event.preventDefault();
   }

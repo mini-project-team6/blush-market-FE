@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import CommentModal from "./CommentModal";
+import CommentModal from "./modal/CommentModal";
 
 export default function DetailElement() {
   return (
