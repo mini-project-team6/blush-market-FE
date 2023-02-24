@@ -1,10 +1,12 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 export default function Header() {
+  const navigate = useNavigate();
   return (  
   <Stdiv>
+    <button onClick={()=>{navigate('/')}}> Main </button>
     <Stlb>header</Stlb> <br />
     <Stdiv2>
     <Link to={'/login'}> 로그인</Link>
