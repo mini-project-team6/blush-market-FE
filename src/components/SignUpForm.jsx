@@ -3,15 +3,20 @@ import styled from "styled-components";
 
 export default function SignUpForm() {
   const [userid, setUserid] = useState("");
-  const [username, setUsername] = useState("");
   const [userpassword, setUserpassword] = useState("");
   const [uservalpassword, setUservalpassword] = useState("");
+
+  const [isname, setIsname] = useState(false);
   const [passwordMatch, setPasswordMatch] = useState(false);
   const [isValidPassword, setIsValidPassword] = useState(false);
 
   const passwordRegex =
     /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/;
   //   console.log(userid);
+
+  const checkID = () => {
+    setIsname(true);
+  };
 
   const handlePasswordChange = (e) => {
     const value = e.target.value;
@@ -47,33 +52,28 @@ export default function SignUpForm() {
           value={userid}
           onChange={(e) => setUserid(e.target.value)}
         />
-        <button type="button" style={{ width: "80px" }}>
+        <button type="button" style={{ width: "80px" }} onClick={checkID}>
           중복확인
         </button>
       </div>
       중복입니다/아닙니다
       <div>
         <input
-          type="text"
-          style={{ width: "350px" }}
-          placeholder="이름"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-      </div>
-      <div>
-        <input
-          type="text"
+          type="password"
           style={{ width: "350px" }}
           placeholder="비밀번호"
           value={userpassword}
           onChange={handlePasswordChange}
         />
       </div>
-      {isValidPassword ? <p>일치</p> : <p>불일치</p>}
+      {isValidPassword ? (
+        <p>조건 만족</p>
+      ) : (
+        <p>영어,숫자,특수문자포함 8자이상이여야합니다</p>
+      )}
       <div>
         <input
-          type="text"
+          type="password"
           style={{ width: "350px" }}
           placeholder="비밀번호확인"
           value={uservalpassword}
@@ -86,7 +86,13 @@ export default function SignUpForm() {
         <p style={{ color: "red" }}>비밀번호 불일치!</p>
       )}
       <div>
-        <button style={{ width: "350px" }}> 제출!</button>
+        <button
+          style={{ width: "350px" }}
+          disabled={!(isname && passwordMatch && isValidPassword)}
+        >
+          {" "}
+          제출!
+        </button>
       </div>
     </StForm>
   );
