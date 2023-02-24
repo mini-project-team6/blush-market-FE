@@ -38,7 +38,11 @@ export default function SignUpForm() {
 
   const signupSubmitHandler = (e) => {
     e.preventDefault();
-    console.log("submit!");
+    const obj = {
+      id: userid,
+      passwd: userpassword,
+    };
+    console.log("submit!", obj);
   };
 
   return (
