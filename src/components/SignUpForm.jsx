@@ -1,21 +1,44 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { useMutation, useQueryClient } from "react-query";
+import { getCheckId, postSignup } from "../api/signup/login";
 
 export default function SignUpForm() {
   const [userid, setUserid] = useState("");
   const [userpassword, setUserpassword] = useState("");
   const [uservalpassword, setUservalpassword] = useState("");
 
+  const [ischeck, setIscheck] = useState(false);
   const [isname, setIsname] = useState(false);
   const [passwordMatch, setPasswordMatch] = useState(false);
   const [isValidPassword, setIsValidPassword] = useState(false);
+
+  // const client = useQueryClient();
+  const signUpMutation = useMutation(postSignup, {
+    onSuccess: (response) => {
+      console.log(response);
+      alert("회원가입 성공?");
+    },
+    onError: (response) => {
+      console.log(response);
+      alert("뭔가 에러?");
+    },
+  });
+
+  const checkIdMutation = useMutation(getCheckId, {
+    onSuccess: (response) => {
+      console.log(response);
+      setIsname(response);
+    },
+  });
 
   const passwordRegex =
     /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/;
   //   console.log(userid);
 
-  const checkID = () => {
-    setIsname(true);
+  const checkID = (e) => {
+    setIscheck(true);
+    checkIdMutation.mutate(e.target.value);
   };
 
   const handlePasswordChange = (e) => {
@@ -40,9 +63,9 @@ export default function SignUpForm() {
     e.preventDefault();
     const obj = {
       id: userid,
-      passwd: userpassword,
+      password: userpassword,
     };
-    console.log("submit!", obj);
+    signUpMutation.mutate(obj);
   };
 
   return (
@@ -56,11 +79,17 @@ export default function SignUpForm() {
           value={userid}
           onChange={(e) => setUserid(e.target.value)}
         />
-        <button type="button" style={{ width: "80px" }} onClick={checkID}>
+        <button
+          type="button"
+          value={userid}
+          style={{ width: "80px" }}
+          onClick={checkID}
+        >
           중복확인
         </button>
       </div>
-      중복입니다/아닙니다
+      {ischeck ? !isname ? <p>이미 사용중</p> : <p>사용가능한 아이디</p> : null}
+      {/* {!isname ? <p>이미 사용중</p> : <p>사용가능한 아이디</p>} */}
       <div>
         <input
           type="password"
