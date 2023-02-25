@@ -1,9 +1,28 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-
+import { useMutation } from "react-query";
+import { postLogin } from "../api/signup/login";
 export default function LoginForm() {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
+
+  const loginMutation = useMutation(postLogin, {
+    onSuccess: (response) => {
+      if (response.headers.authorization) {
+        localStorage.setItem(
+          "token",
+          response.headers.authorization.split(" ")[1]
+        );
+        alert("로그인 성공?");
+      } else {
+        alert("로그인 실패?");
+      }
+    },
+    onError: (response) => {
+      console.log(response);
+      alert("로그인 에러??");
+    },
+  });
 
   const loginSubmitHandler = (e) => {
     e.preventDefault();
@@ -16,6 +35,8 @@ export default function LoginForm() {
       alert("똑바로 입력 하세요....");
       return;
     }
+
+    loginMutation.mutate(obj);
   };
 
   return (

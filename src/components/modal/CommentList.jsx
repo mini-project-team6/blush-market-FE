@@ -2,7 +2,7 @@ import React from "react";
 
 import styled from "styled-components";
 
-export default function CommentList() {
+export default function yCommentList() {
   return (
     <ScrollableDiv>
       <h1 style={{ textAlign: "center" }}>댓글</h1>
