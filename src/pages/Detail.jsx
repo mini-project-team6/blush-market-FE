@@ -1,4 +1,5 @@
 import React from "react";
+
 import DetailElement from "../components/DetailElement";
 
 export default function Detail() {
@@ -6,5 +7,6 @@ export default function Detail() {
     <div>
       <DetailElement />
     </div>
+
   );
 }
