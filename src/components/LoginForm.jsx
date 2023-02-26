@@ -10,8 +10,12 @@ export default function LoginForm() {
     onSuccess: (response) => {
       if (response.headers.authorization) {
         localStorage.setItem(
-          "token",
+          "access_token",
           response.headers.authorization.split(" ")[1]
+        );
+        localStorage.setItem(
+          "refresh_token",
+          response.headers.refresh_token.split(" ")[1]
         );
         alert("로그인 성공?");
       } else {
