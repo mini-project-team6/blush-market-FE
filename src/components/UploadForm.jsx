@@ -2,12 +2,12 @@ import useInput from '../hooks/useInput';
 import React ,{ useState } from 'react'
 import { useMutation } from 'react-query';
 import { useQueryClient } from 'react-query';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
-import { uploadPost } from '../api/upload/upload';
+import { uploadPost } from '../api/uploadApi/upload';
 
 const UploadForm = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const queryClient = useQueryClient();
   
   const mutation = useMutation(uploadPost,{
@@ -30,29 +30,52 @@ const UploadForm = () => {
 
   const [newtitle, onTitleHandler] = useInput('');
   const [newcontent, onContentHandler] = useInput('');
-  const [newimage, onImageHandler] = useInput('');
+  const [newimage, setNewImage] = useState('');
+  const [file, setFile] = useState('');
 
-  // const onChangeHandler = (event) => {
-  //   const {name, value} = event.target;
-  //   setNewPost ({...newpost, [name]: value});
-  // }
+  const onImgPostHandler = (event) => {
+    // console.log(event.target.files)
+    setNewImage([]);
+    for (let i = 0; i < event.target.files.length; i++) {
+        setFile(event.target.files[i])
+        let reader = new FileReader();
+        reader.readAsDataURL(event.target.files[i]);
+        reader.addEventListener('loaded', (event)=>{
+          newimage.src = event.target.result;
+        })
+        reader.onloadend = () => {
+          const base = reader.result;
+          if (base) {
+            const baseSub = base.toString();
+            setNewImage((newimage) => [...newimage, baseSub]);
+          }
+        };
+      }
+  };
   
   const onSubmitPostHandler = async (event) => {
     event.preventDefault();
-    if ( newtitle.trim()=== "" || newcontent.trim()=== "" || newimage.trim()=== ""){
+    if ( newtitle.trim()=== "" || newcontent.trim()=== ""){
       return alert("빈칸을 채워주세요");
     } 
-    const newPost = {
-      title : newtitle,
-      content : newcontent,
-      image : newimage
-    };
-    mutation.mutate(newPost);
+    // const newPost = {
+    //   title : newtitle,
+    //   content : newcontent,
+    //   image : newimage
+    // };
+    
+    const formData = new FormData();
+    formData.append('title', newtitle);
+    formData.append('content', newcontent);
+    formData.append('image', file);
+
+    mutation.mutate(formData);
+    console.log(formData.get('title'), formData.get('content'), formData.get('image'));
     alert("업로드 완료");
   }
   
   return (
-    <form onSubmit={onSubmitPostHandler}>
+    <form onSubmit={onSubmitPostHandler} encType='multipart/form-data'>
       <StCard>
         <label> Title </label><br />
         <input
@@ -66,15 +89,18 @@ const UploadForm = () => {
           value={newcontent}
           onChange={onContentHandler}
         /> <br />
-        <StpicInput 
-          type="file" 
-          placeholder="사진업로드"
-          accept="image/*"
-          ref={fileInput}
-          value = {newimage} 
-          onChange={onImageHandler} /> <br />
+          <StpicInput 
+            name='imgUpload'
+            type="file" 
+            accept="image/*"
+            ref={fileInput}
+            // value = {newimage} 
+            onChange={onImgPostHandler} />
+            <StuploadBtn onClick={onImgButton}> 파일 업로드 </StuploadBtn>
+            <div>
+              <ImgBox src={newimage} alt="img" />
+            </div> <br />
         <StupicBtn> 업로드 </StupicBtn> 
-        {/* <StuploadBtn onClick={()=>navigate('/')}> 게시 </StuploadBtn> */}
       </StCard>
     </form>
   )
@@ -101,3 +127,8 @@ const StpicInput = styled.input`
   height : 30px;
   width : 200px;
 `
+const ImgBox = styled.img`
+  width: 300px;
+  height: 200px;
+  margin : 10px
+`;
