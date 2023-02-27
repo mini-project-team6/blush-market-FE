@@ -17,7 +17,10 @@ export default function Main() {
   });
 
   // console.log("bl", boardList);
+  // const boardList = useSelector((state) => state.boards.boards);
   const boardList = useSelector((state) => state.boards.boards);
+
+  // console.log(boardList);
 
   const [searchTitle, setSearchTitle] = useState("");
   const searchTitleChangeHandler = (e) => {
@@ -58,8 +61,8 @@ export default function Main() {
       </div>
 
       {boardList
-        .filter((item) => item.title.includes(searchTitle))
-        .map((target, index) => {
+        ?.filter((item) => item.title.includes(searchTitle))
+        ?.map((target, index) => {
           return <p key={index}>{target.title}</p>;
         })}
       <StGridDiv>
