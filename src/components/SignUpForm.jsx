@@ -7,11 +7,13 @@ export default function SignUpForm() {
   const [userid, setUserid] = useState("");
   const [userpassword, setUserpassword] = useState("");
   const [uservalpassword, setUservalpassword] = useState("");
+  const [useremail, setUserEmail] = useState("");
 
   const [ischeck, setIscheck] = useState(false);
   const [isname, setIsname] = useState(false);
   const [passwordMatch, setPasswordMatch] = useState(false);
   const [isValidPassword, setIsValidPassword] = useState(false);
+  const [isValidEmail, setIsValidEmail] = useState(false);
 
   // const client = useQueryClient();
   const signUpMutation = useMutation(postSignup, {
@@ -53,6 +55,14 @@ export default function SignUpForm() {
       : setIsValidPassword(false);
   };
 
+  //.이메일 정규표현식
+  const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const handleEmailChange = (e) => {
+    const value = e.target.value;
+    setUserEmail(value);
+    regex.test(value) ? setIsValidEmail(true) : setIsValidEmail(false);
+  };
+
   const handleConfirmPasswordChange = (e) => {
     const value = e.target.value;
     setUservalpassword(value);
@@ -64,6 +74,7 @@ export default function SignUpForm() {
     const obj = {
       id: userid,
       password: userpassword,
+      email: useremail,
     };
     signUpMutation.mutate(obj);
   };
@@ -71,6 +82,17 @@ export default function SignUpForm() {
   return (
     <StForm onSubmit={signupSubmitHandler}>
       <h1>회원가입</h1>
+      <div>
+        <input
+          type="text"
+          style={{ width: "270px" }}
+          placeholder="이메일"
+          value={useremail}
+          onChange={handleEmailChange}
+        />
+      </div>
+      {isValidEmail ? <p>true</p> : <p>false</p>}
+
       <div>
         <input
           type="text"
@@ -121,7 +143,9 @@ export default function SignUpForm() {
       <div>
         <button
           style={{ width: "350px" }}
-          disabled={!(isname && passwordMatch && isValidPassword)}
+          disabled={
+            !(isname && passwordMatch && isValidPassword && isValidEmail)
+          }
         >
           {" "}
           제출!

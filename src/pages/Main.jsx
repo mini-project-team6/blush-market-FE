@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
 import { getBoardList } from "../api/board/board";
 import { useDispatch, useSelector } from "react-redux";
 import { reduxGetBoardList } from "../redux/module/boardSlice";
 
 export default function Main() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isLoading, isError, data } = useQuery("lists", getBoardList, {
     onSuccess: (response) => {
@@ -16,7 +17,10 @@ export default function Main() {
   });
 
   // console.log("bl", boardList);
+  // const boardList = useSelector((state) => state.boards.boards);
   const boardList = useSelector((state) => state.boards.boards);
+
+  // console.log(boardList);
 
   const [searchTitle, setSearchTitle] = useState("");
   const searchTitleChangeHandler = (e) => {
@@ -25,6 +29,17 @@ export default function Main() {
       item.title.includes(searchTitle)
     );
     console.log(filterBoardList);
+  };
+
+  //업로드시 토큰확인
+  const istoken = () => !!localStorage.getItem("access_token");
+  const btnGoToUpload = () => {
+    if (istoken()) {
+      navigate("/upload");
+    } else {
+      alert("로그인하세요");
+      navigate("/login");
+    }
   };
 
   if (isLoading) return <p>Loading...</p>;
@@ -39,16 +54,16 @@ export default function Main() {
         value={searchTitle}
         onChange={searchTitleChangeHandler}
       />
-      <Link to="Upload">게시글 업로드</Link>
+      <button onClick={btnGoToUpload}>게시글 업로드</button>
       <div>
         <button>판매중</button>
         <button>판매완료</button>
       </div>
 
       {boardList
-        .filter((item) => item.title.includes(searchTitle))
-        .map((target) => {
-          return <p>{target.title}</p>;
+        ?.filter((item) => item.title.includes(searchTitle))
+        ?.map((target, index) => {
+          return <p key={index}>{target.title}</p>;
         })}
       <StGridDiv>
         <Link to="Detail">

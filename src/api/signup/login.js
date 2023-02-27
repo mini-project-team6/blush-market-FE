@@ -5,10 +5,9 @@ export const postLogin = async (payload) => {
   try {
     //http://43.201.8.139:8080/member/login
     const response = await instance.post("/member/login", {
-      name: payload.id,
+      email: payload.id,
       password: payload.password,
     });
-    console.log(response);
     return response;
   } catch (error) {
     suseSweet(1000, "error", error.response.data.msg);
@@ -20,6 +19,7 @@ export const postSignup = async (payload) => {
     const data = await instance.post("/member/signup", {
       name: payload.id,
       password: payload.password,
+      email: payload.email,
     });
     suseSweet(1000, "success", "회원가입 성공");
     return data;
