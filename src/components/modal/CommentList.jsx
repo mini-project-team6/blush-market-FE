@@ -1,12 +1,28 @@
-import React from "react";
-
+import { useQuery } from "react-query";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import { getDetailPost } from "../../api/UploadApi/UploadApi";
+import useInput from "../../hooks/useInput";
 
 export default function yCommentList() {
+  // const [newcomment, onCommentHandler] = useInput('');
+  // const { id } = useParams();
+  // const { data } = useQuery("post", getDetailPost);
+
   return (
     <ScrollableDiv>
       <h1 style={{ textAlign: "center" }}>댓글</h1>
-      <h5>title : content</h5>
+      <h5>content</h5>
+      <div>
+        {/* <div> {response} </div> */}
+        {/* {data?.map((i) => {
+          return (
+            <div key = {i.id}> 
+              <div> {i.content}</div>
+            </div>
+          )
+        })} */}
+      </div>
     </ScrollableDiv>
   );
 }
