@@ -4,7 +4,7 @@ import { instance, baseURL } from "../axios";
 export const postLogin = async (payload) => {
   try {
     //http://43.201.8.139:8080/member/login
-    const response = await instance.post("/member/login", {
+    const response = await instance.post("/api/member/login", {
       email: payload.id,
       password: payload.password,
     });
@@ -16,7 +16,7 @@ export const postLogin = async (payload) => {
 
 export const postSignup = async (payload) => {
   try {
-    const data = await instance.post("/member/signup", {
+    const data = await instance.post("/api/member/signup", {
       name: payload.id,
       password: payload.password,
       email: payload.email,
@@ -30,7 +30,9 @@ export const postSignup = async (payload) => {
 
 export const getCheckId = async (payload) => {
   try {
-    const response = await instance.get(`/member/usercheck/${payload}`);
+    const response = await instance.get(`/api/member`, {
+      params: { username: payload },
+    });
     console.log(response.data);
     return response.data.success;
   } catch (error) {

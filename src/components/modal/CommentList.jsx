@@ -1,7 +1,7 @@
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import { getDetailPost } from "../../api/UploadApi/UploadApi";
+import { getDetailPost } from "../../api/detail/getdetail";
 import useInput from "../../hooks/useInput";
 
 export default function yCommentList() {
