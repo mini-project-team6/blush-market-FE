@@ -3,7 +3,7 @@ import styled from "styled-components";
 import CommentList from "./CommentList";
 
 export default function CommentModalContent() {
-  const [title, setTitle] = useState("");
+  // const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   function handleSubmit(event) {
     event.preventDefault();
@@ -13,12 +13,12 @@ export default function CommentModalContent() {
       <CommentList />
       <Footer>
         <CommentModalForm onSubmit={handleSubmit}>
-          <CommentInput
+          {/* <CommentInput
             type="text"
             placeholder="이름"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-          />
+          /> */}
           <CommentInput
             type="text"
             placeholder="댓글을 입력하세요"
@@ -42,6 +42,8 @@ const CommentModalForm = styled.form`
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
+  width: 100%;
   margin-top: 1rem;
   bottom: 0;
   left: 0;

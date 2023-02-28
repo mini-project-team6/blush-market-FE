@@ -71,8 +71,8 @@ const StCard = styled.section`
   ${({ soldOut }) =>
     soldOut &&
     css`
-      filter: blur(2px);
-      opacity: 0.7;
+      filter: blur(1px);
+      opacity: 0.6;
     `}
 `;
 const StImg = styled.img`

@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { getDetailPost } from "../../api/detail/getdetail";
 import useInput from "../../hooks/useInput";
 
-export default function yCommentList() {
+export default function CommentList() {
   // const [newcomment, onCommentHandler] = useInput('');
   // const { id } = useParams();
   // const { data } = useQuery("post", getDetailPost);
