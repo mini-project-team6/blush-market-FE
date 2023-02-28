@@ -1,9 +1,9 @@
-import { instance } from "../axios";
+import { baseURL } from "../axios";
 
 const getDetailPost = async () => {
-  const response = await instance.get("/api/post");
+  const response = await baseURL.get("/api/post");
   // console.log(response.data[0].commentList);
-  // return response.data[0].commentList;
+  // return response.data.response.commentList;
   return response.data;
 };
 
