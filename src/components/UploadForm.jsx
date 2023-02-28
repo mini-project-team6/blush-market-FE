@@ -1,18 +1,17 @@
 import useInput from "../hooks/useInput";
 import React, { useState } from "react";
-import { useMutation } from "react-query";
-import { useQueryClient } from "react-query";
-// import { useNavigate } from 'react-router-dom';
+import { useMutation, useQueryClient  } from "react-query";
+import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
 import { uploadPost } from "../api/uploadApi/upload";
 
 const UploadForm = () => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const mutation = useMutation(uploadPost, {
     onSuccess: () => {
-      queryClient.invalidateQueries("newPost");
+      queryClient.invalidateQueries("lists");
     },
   });
 
@@ -52,7 +51,6 @@ const UploadForm = () => {
     event.preventDefault();
     if (newtitle.trim() === "" || newcontent.trim() === "") {
       return alert("빈칸을 채워주세요");
-
     } 
 
     const formData = new FormData();
@@ -60,10 +58,10 @@ const UploadForm = () => {
     formData.append('content', newcontent);
     formData.append('file', file);
     mutation.mutate(formData);
-
-    console.log(formData.get('title'), formData.get('content'), formData.get('file'));
+    // console.log(formData.get('title'), formData.get('content'), formData.get('file'));
 
     alert("업로드 완료");
+    navigate("/");
   };
 
   return (
