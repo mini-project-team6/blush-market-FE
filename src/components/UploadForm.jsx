@@ -16,11 +16,11 @@ const UploadForm = () => {
     },
   });
 
-  const [newpost, setNewPost] = useState({
-    title : '',
-    content : '',
-    image : ''
-  });
+  // const [newpost, setNewPost] = useState({
+  //   title : '',
+  //   content : '',
+  //   image : ''
+  // });
 
   const fileInput = React.useRef(null);
   const onImgButton = (event) => {
