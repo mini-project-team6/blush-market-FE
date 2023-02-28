@@ -18,7 +18,8 @@ function App() {
         { path: "login", element: <Login /> },
         { path: "signup", element: <SignUp /> },
         { path: "upload", element: <Upload /> },
-        { path: "detail", element: <Detail /> },
+        { path: "detail/:id", element: <Detail /> },
+        { path: "detail/", element: <Detail /> },
       ],
     },
   ]);
