@@ -16,9 +16,16 @@ export default function Main() {
     },
   });
 
+  console.log("data", data?.data.response);
+  const boardList = data?.data.response;
+
   // console.log("bl", boardList);
   // const boardList = useSelector((state) => state.boards.boards);
-  const boardList = useSelector((state) => state.boards.boards);
+  // let boardList = useSelector((state) => state.boards.boards) || [];
+  // console.log(boardList.length);
+  // if (boardList?.length) {
+  //   console.log("빈배열");
+  // }
 
   // console.log(boardList);
 
@@ -45,6 +52,10 @@ export default function Main() {
   if (isLoading) return <p>Loading...</p>;
 
   if (isError) return <p>{isError}</p>;
+
+  if (!data) {
+    return <p>loading</p>;
+  }
   return (
     <StDiv>
       <input
@@ -61,8 +72,8 @@ export default function Main() {
       </div>
 
       {boardList
-        ?.filter((item) => item.title.includes(searchTitle))
-        ?.map((target, index) => {
+        .filter((item) => item.title.includes(searchTitle))
+        .map((target, index) => {
           return <p key={index}>{target.title}</p>;
         })}
       <StGridDiv>
