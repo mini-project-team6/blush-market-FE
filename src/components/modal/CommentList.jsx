@@ -1,18 +1,75 @@
-import { useQuery } from "react-query";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
+import { baseURL } from "../../api/axios";
 import styled from "styled-components";
-import { getDetailPost } from "../../api/detail/getdetail";
+// import { getDetailPost } from "../../api/detail/getdetail";
 import useInput from "../../hooks/useInput";
+import { useEffect, useState } from "react";
 
 export default function CommentList() {
+  const param = useParams();
+  const [commentList, setCommentList] = useState([]);
+  const getDetailPost = async () => {
+    // console.log(`/api/post/${param}`);
+    const data = await baseURL.get(`/api/post/${param.id}`);
+    return data;
+  };
+  const { isLoading, isError, data } = useQuery("details", getDetailPost, {
+    onSuccess: (response) => {
+      setCommentList(response.data.response.commentList.reverse());
+    },
+  });
+
+  const deleteComment = async (payload) => {
+    const data = await baseURL.delete(`/api/post/comment/${payload}`);
+    return data;
+  };
+  const queryClient = useQueryClient();
+  const deleteMutation = useMutation(deleteComment, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("details");
+    },
+  });
+  const onDeleteComment = (e) => {
+    console.log(e);
+    deleteMutation.mutate(e);
+  };
+  // useEffect(() => {
+  //   const getDetailPost = async () => {
+  //     const { data } = await baseURL.get(`/api/post/${id}`);
+  //     console.log(data);
+  //     return data.response;
+  //   };
+  //   getDetailPost().then((result) => setDetail(result));
+  // }, [id]);
+
   // const [newcomment, onCommentHandler] = useInput('');
   // const { id } = useParams();
   // const { data } = useQuery("post", getDetailPost);
+  // useEffect(() => {
+  //   commentList.reverse();
+  // }, []);
 
+  if (isLoading) return <p>Loading...</p>;
+
+  if (isError) return <p>{isError}</p>;
   return (
     <ScrollableDiv>
       <h1 style={{ textAlign: "center" }}>댓글</h1>
-      <h5>content</h5>
+      {commentList?.map((item) => {
+        return (
+          <div>
+            <p>
+              {item.username} : {item.content}
+              <span>
+                {item.ismine ? (
+                  <button onClick={() => onDeleteComment(item.id)}>X</button>
+                ) : null}
+              </span>
+            </p>
+          </div>
+        );
+      })}
       <div>
         {/* <div> {response} </div> */}
         {/* {data?.map((i) => {
@@ -45,3 +102,5 @@ const ScrollableDiv = styled.div`
     border-radius: 5px; /* 스크롤바 모서리의 반경 */
   }
 `;
+
+// const StCommentDiv =
