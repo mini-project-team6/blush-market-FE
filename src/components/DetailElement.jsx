@@ -1,33 +1,95 @@
 import React, { useEffect, useState } from "react";
-import { useQueryClient } from "react-query";
-import { useParams } from "react-router-dom";
+import { useMutation, useQueryClient } from "react-query";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import CommentModal from "./modal/CommentModal";
-import { instance } from "../api/axios";
+import { baseURL } from "../api/axios";
+import { getDetailPost } from "../api/detail/getdetail";
 
 export default function DetailElement() {
   const { id } = useParams();
-  const [detail, setDetail] = useState({});
+
+  console.log(id);
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  // useEffect(() => {
-  //   const getPost = async () => {
-  //     const response = await instance.get("/post/2");
-  //     // const response = await instance.get(`/post/${id}`);
-  //     return response.data;
-  //   };
-  //   getPost().then((result) => setDetail(result))
-  // }, [id]);
+  const [detail, setDetail] = useState('');
+  const [updateImg, setUpDateImg] = useState('');
+  const [updateTitle, setupdateTitle] = useState('');
+  const [updateContent, setupdateImg] = useState('');
+
+
+  const fileInput = React.useRef(null);
+  const onImgButton = (event) => {
+    event.preventDefault();
+    fileInput.current.click();
+  };
+
+  // const updateMutation = useMutation(updateBoard, {
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries("post");
+  //   },
+  // });
+  const mutation = useMutation(getDetailPost, {
+    onSuccess: () =>{
+      queryClient.invalidateQueries("post")
+    }
+  })
+
+  useEffect(() => {
+    const getDetailPost = async () => {
+      const {data} = await baseURL.get(`/api/post/${id}`);
+      // const response = await baseURL.get('/api/post');
+      console.log(data)
+      return data;
+    };
+    getDetailPost().then((result) => setDetail(result))
+  }, [id]);
+
+
+  const onDeleteBtnHandler = (id) => {
+    const msg = window.confirm("삭제?");
+    if (msg) {
+      mutation.mutate(id);
+      navigate("/");
+    } else {
+      return;
+    }
+  };
+
+  // const onEditBtnHandler = (Id) => {
+  //   const msg = window.confirm("수정완료?");
+  //   if (!msg) {
+  //     return;
+  //   } else {
+  //     const payload = {
+  //       title: updateTitle,
+  //       content: updateContent,
+  //       file: updateImg,
+  //     };
+  //     updateMutation.mutate(payload);
+  //     setDetail(payload);
+  //     // onToggle();
+  //     alert("수정 완료!");
+  //   }
+  // };
+
 
   return (
     <StDiv>
-      {/* <ImgBox src = {detail.image}></ImgBox> */}
+      <ImgBox src = {detail.image}></ImgBox>
       <h2>{detail.title}</h2>
       <h5>{detail.content}</h5>
 
-      <div>자기게시글이면 수정/삭제버튼이 보여지는구간</div>
+      <div>
+        <button onClick={() => onDeleteBtnHandler(detail.id)}>삭제</button>
+        {/* <button onClick={() => onEditBtnHandler(detail.Id)}>수정</button> */}
+        <button>수정</button>
 
-      <CommentModal />
+
+      </div>
+
+      {/* <CommentModal /> */}
     </StDiv>
   );
 }

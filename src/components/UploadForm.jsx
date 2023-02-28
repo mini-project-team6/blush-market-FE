@@ -16,11 +16,6 @@ const UploadForm = () => {
     },
   });
 
-  const [newpost, setNewPost] = useState({
-    title: "",
-    content: "",
-    image: "",
-  });
 
   const fileInput = React.useRef(null);
   const onImgButton = (event) => {
@@ -57,24 +52,17 @@ const UploadForm = () => {
     event.preventDefault();
     if (newtitle.trim() === "" || newcontent.trim() === "") {
       return alert("빈칸을 채워주세요");
-    }
-    // const newPost = {
-    //   title : newtitle,
-    //   content : newcontent,
-    //   image : newimage
-    // };
+
+    } 
 
     const formData = new FormData();
-    formData.append("title", newtitle);
-    formData.append("content", newcontent);
-    formData.append("file", file);
-
+    formData.append('title', newtitle);
+    formData.append('content', newcontent);
+    formData.append('file', file);
     mutation.mutate(formData);
-    console.log(
-      formData.get("title"),
-      formData.get("content"),
-      formData.get("image")
-    );
+
+    console.log(formData.get('title'), formData.get('content'), formData.get('file'));
+
     alert("업로드 완료");
   };
 
