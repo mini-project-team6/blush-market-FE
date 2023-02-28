@@ -13,10 +13,12 @@ export default function DetailElement() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
+
   const [detail, setDetail] = useState('');
   const [updateImg, onUpdateImg] = useState('');
   const [updateTitle, onUpdateTitle] = useInput('');
   const [updateContent, onUpdateContent] = useInput('');
+
 
   const fileInput = React.useRef(null);
   const onImgButton = (event) => {
@@ -24,14 +26,17 @@ export default function DetailElement() {
     fileInput.current.click();
   };
 
+
   // 전체 조회
   useEffect(() => {
     const getDetailPost = async () => {
       const {data} = await baseURL.get(`/api/post/${id}`);
       return data.response;
+
     };
-    getDetailPost().then((result) => setDetail(result))
+    getDetailPost().then((result) => setDetail(result));
   }, [id]);
+
 
   //삭제
   const DELETE_mutation = useMutation(DeletePost, {
@@ -76,6 +81,7 @@ export default function DetailElement() {
 
   return (
     <StDiv>
+
       {detail.ismine ? (
         <div>
           <ImgBox src = {detail.image}></ImgBox>
@@ -93,7 +99,8 @@ export default function DetailElement() {
         </div>
       )}
 
-      {/* <CommentModal /> */}
+
+      <CommentModal />
     </StDiv>
   );
 }
