@@ -62,13 +62,7 @@ export default function Main() {
   //판매중or판매완료
   const btnSellorSoldout = async (e) => {
     console.log(e);
-    // e === "SELL"
-    //   ? (data = await getBoardListByToggle({
-    //       sellstatus: 0,
-    //     }))
-    //   : (data = await getBoardListByToggle({
-    //       sellstatus: 1,
-    //     }));
+
     if (e === "SELL") {
       const { data } = await getBoardListByToggle({
         sellstatus: 0,

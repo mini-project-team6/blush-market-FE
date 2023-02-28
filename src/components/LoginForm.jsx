@@ -21,6 +21,8 @@ export default function LoginForm() {
         localStorage.setItem(
           "access_token",
           response.headers.authorization.split(" ")[1]
+          //au~~ bar~~~ token
+          //bar~~ token
         );
         localStorage.setItem(
           "refresh_token",

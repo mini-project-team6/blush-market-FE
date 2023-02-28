@@ -13,12 +13,10 @@ export default function DetailElement() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-
-  const [detail, setDetail] = useState('');
-  const [updateImg, onUpdateImg] = useState('');
-  const [updateTitle, onUpdateTitle] = useInput('');
-  const [updateContent, onUpdateContent] = useInput('');
-
+  const [detail, setDetail] = useState("");
+  const [updateImg, onUpdateImg] = useState("");
+  const [updateTitle, onUpdateTitle] = useInput("");
+  const [updateContent, onUpdateContent] = useInput("");
 
   const fileInput = React.useRef(null);
   const onImgButton = (event) => {
@@ -26,23 +24,21 @@ export default function DetailElement() {
     fileInput.current.click();
   };
 
-
   // 전체 조회
   useEffect(() => {
     const getDetailPost = async () => {
-      const {data} = await baseURL.get(`/api/post/${id}`);
+      const { data } = await baseURL.get(`/api/post/${id}`);
+      console.log(data);
       return data.response;
-
     };
     getDetailPost().then((result) => setDetail(result));
   }, [id]);
 
-
   //삭제
   const DELETE_mutation = useMutation(DeletePost, {
     onSuccess: () => {
-      queryClient.invalidateQueries("lists")
-    }
+      queryClient.invalidateQueries("lists");
+    },
   });
 
   const onDeleteBtnHandler = (id) => {
@@ -52,7 +48,7 @@ export default function DetailElement() {
     navigate("/");
   };
 
- //수정
+  //수정
   const Edit_Mutation = useMutation(EditPost, {
     onSuccess: () => {
       queryClient.invalidateQueries("lists");
@@ -60,15 +56,15 @@ export default function DetailElement() {
   });
 
   const onEditBtnHandler = () => {
-      Edit_Mutation.mutate();
-      setDetail();
-      alert("수정 완료!");
+    Edit_Mutation.mutate();
+    setDetail();
+    alert("수정 완료!");
   };
   // const onSubmitPostHandler = async (event) => {
   //   event.preventDefault();
   //   if (newtitle.trim() === "" || newcontent.trim() === "") {
   //     return alert("빈칸을 채워주세요");
-  //   } 
+  //   }
 
   //   const formData = new FormData();
   //   formData.append('title', updateTitle);
@@ -81,24 +77,22 @@ export default function DetailElement() {
 
   return (
     <StDiv>
-
       {detail.ismine ? (
         <div>
-          <ImgBox src = {detail.image}></ImgBox>
+          <ImgBox src={detail.image}></ImgBox>
           <h2>{detail.title}</h2>
           <h5>{detail.content}</h5>
           <button onClick={() => onDeleteBtnHandler(detail.id)}>삭제</button>
           <button onClick={() => onEditBtnHandler(detail.id)}>수정</button>
           {/* <button>수정</button> */}
         </div>
-      ):(
+      ) : (
         <div>
-          <ImgBox src = {detail.image}></ImgBox>
+          <ImgBox src={detail.image}></ImgBox>
           <h2>{detail.title}</h2>
           <h5>{detail.content}</h5>
         </div>
       )}
-
 
       <CommentModal />
     </StDiv>
