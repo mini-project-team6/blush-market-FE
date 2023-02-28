@@ -8,6 +8,7 @@ import { getDetailPost } from "../api/detail/getdetail";
 
 export default function DetailElement() {
   const { id } = useParams();
+
   console.log(id);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -105,5 +106,5 @@ const StDiv = styled.div`
 const ImgBox = styled.img`
   width: 300px;
   height: 200px;
-  margin : 10px
+  margin: 10px;
 `;

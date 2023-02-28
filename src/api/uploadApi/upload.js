@@ -8,6 +8,7 @@ import { instance, baseURL } from "../axios";
 //     }
 // }
 
+
 const uploadPost = async(formData) => {
   try{
     const response = await baseURL.post("/api/post", formData, {
@@ -27,4 +28,5 @@ const uploadPost = async(formData) => {
   // return response;
 }
 
-export {uploadPost};
+
+export { uploadPost };
