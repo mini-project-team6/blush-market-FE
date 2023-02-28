@@ -13,11 +13,10 @@ export default function DetailElement() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const [detail, setDetail] = useState('');
-  const [updateImg, setUpDateImg] = useState('');
-  const [updateTitle, setupdateTitle] = useState('');
-  const [updateContent, setupdateImg] = useState('');
-
+  const [detail, setDetail] = useState("");
+  const [updateImg, setUpDateImg] = useState("");
+  const [updateTitle, setupdateTitle] = useState("");
+  const [updateContent, setupdateImg] = useState("");
 
   const fileInput = React.useRef(null);
   const onImgButton = (event) => {
@@ -31,21 +30,20 @@ export default function DetailElement() {
   //   },
   // });
   const mutation = useMutation(getDetailPost, {
-    onSuccess: () =>{
-      queryClient.invalidateQueries("post")
-    }
-  })
+    onSuccess: () => {
+      queryClient.invalidateQueries("post");
+    },
+  });
 
   useEffect(() => {
     const getDetailPost = async () => {
-      const {data} = await baseURL.get(`/api/post/${id}`);
+      const { data } = await baseURL.get(`/api/post/${id}`);
       // const response = await baseURL.get('/api/post');
-      console.log(data)
+      console.log(data);
       return data;
     };
-    getDetailPost().then((result) => setDetail(result))
+    getDetailPost().then((result) => setDetail(result));
   }, [id]);
-
 
   const onDeleteBtnHandler = (id) => {
     const msg = window.confirm("삭제?");
@@ -74,10 +72,9 @@ export default function DetailElement() {
   //   }
   // };
 
-
   return (
     <StDiv>
-      <ImgBox src = {detail.image}></ImgBox>
+      <ImgBox src={detail.image}></ImgBox>
       <h2>{detail.title}</h2>
       <h5>{detail.content}</h5>
 
@@ -85,11 +82,9 @@ export default function DetailElement() {
         <button onClick={() => onDeleteBtnHandler(detail.id)}>삭제</button>
         {/* <button onClick={() => onEditBtnHandler(detail.Id)}>수정</button> */}
         <button>수정</button>
-
-
       </div>
 
-      {/* <CommentModal /> */}
+      <CommentModal />
     </StDiv>
   );
 }
