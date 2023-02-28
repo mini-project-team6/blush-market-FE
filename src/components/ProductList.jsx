@@ -1,110 +1,37 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { Link, useNavigate } from "react-router-dom";
-import { useQuery } from "react-query";
-import {
-  getBoardList,
-  getBoardListByKeyword,
-  getBoardListByToggle,
-} from "../api/board/board";
-import ProductList from "../components/ProductList";
+import React, { memo } from "react";
+import { Link } from "react-router-dom";
+import styled, { css } from "styled-components";
 
-export default function Main() {
-  const navigate = useNavigate();
-  const [list, setList] = useState([]);
-  const [searchTitle, setSearchTitle] = useState("");
-  const searchTitleChangeHandler = (e) => {
-    setSearchTitle(e.target.value);
-  };
-
-  const { isLoading, isError, data } = useQuery("lists", getBoardList, {
-    onSuccess: (response) => {
-      setList(response.data.response);
-    },
-  });
-
-  // console.log("data", data?.data.response);
-  // const boardList = data?.data.response;
-  console.log("list", list);
-
-  // console.log("bl", boardList);
-  // const boardList = useSelector((state) => state.boards.boards);
-  // let boardList = useSelector((state) => state.boards.boards) || [];
-  // console.log(boardList.length);
-  // if (boardList?.length) {
-  //   console.log("빈배열");
-  // }
-
-  // console.log(boardList);
-
-  //업로드시 토큰확인
-  const istoken = () => !!localStorage.getItem("access_token");
-  const btnGoToUpload = () => {
-    if (istoken()) {
-      navigate("/upload");
-    } else {
-      alert("로그인하세요");
-      navigate("/login");
-    }
-  };
-
-  //텍스트 검색
-  const btnSearch = async () => {
-    console.log(searchTitle);
-    const { data } = await getBoardListByKeyword({
-      keyword: searchTitle,
-    });
-    console.log(data);
-    setList(data.response);
-  };
-
-  //판매중or판매완료
-  const btnSellorSoldout = async (e) => {
-    console.log(e);
-    e === "SELL"
-      ? (data = await getBoardListByToggle({
-          sellstatus: 0,
-        }))
-      : (data = await getBoardListByToggle({
-          sellstatus: 1,
-        }));
-    setList(data.response);
-  };
-
-  if (isLoading) return <p>Loading...</p>;
-
-  if (isError) return <p>{isError}</p>;
-
-  if (!list) {
-    return <p>loading</p>;
-  }
+function ProductList({ products }) {
+  console.log("prpr", products);
   return (
-    <StDiv>
-      <div>
-        <input
-          type="text"
-          placeholder="검색창"
-          style={{ width: "300px" }}
-          value={searchTitle}
-          onChange={searchTitleChangeHandler}
-        />
-        <button onClick={btnSearch}>검색</button>
-      </div>
-      <button onClick={btnGoToUpload}>게시글 업로드</button>
-      <div>
-        <button onClick={() => btnSellorSoldout("SELL")}>판매중</button>
-        <button onClick={() => btnSellorSoldout("SOULOUT")}>판매완료</button>
-      </div>
-
-      <ProductList products={list} />
-
-      {/* {boardList
-        .filter((item) => item.title.includes(searchTitle))
-        .map((target, index) => {
-          return <p key={index}>{target.title}</p>;
-        })} */}
+    <>
       <StGridDiv>
-        <Link to="detail">
+        {products.map((target) => {
+          return (
+            <StLink to={`detail/${target.id}`}>
+              <StCard key={target.id} soldOut={target.sellState !== "SELL"}>
+                <StImg alt="홍당무" src={target.image}></StImg>
+                <StFlexdiv>
+                  <StP maxLength={16}>{target.title}</StP>
+                  <StP2>
+                    {target.sellState === "SELL" ? "판매중" : "판매완료"}
+                  </StP2>
+                </StFlexdiv>
+              </StCard>
+            </StLink>
+          );
+        })}
+      </StGridDiv>
+    </>
+  );
+}
+
+export default memo(ProductList);
+
+{
+  /* <StGridDiv>
+        <Link to="Detail">
           <StCard>
             <img
               alt="홍당무"
@@ -114,29 +41,77 @@ export default function Main() {
             <span>판매완료</span>
           </StCard>
         </Link>
-      </StGridDiv>
-    </StDiv>
-  );
+      </StGridDiv> */
 }
-
-const StDiv = styled.div`
-  margin-top: 100px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  gap: 20px;
-`;
 
 const StGridDiv = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  width: 90%;
+  width: 80%;
+
   text-align: center;
 `;
 
 const StCard = styled.section`
-  background-color: gray;
+  background-color: white;
   border: 1px solid black;
-  margin: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+
+  width: 1fr;
+  min-width: 200px;
+  height: 200px;
+  margin-bottom: 40px;
+  margin-top: 50px;
+
+  // soldOut 값이 true인 경우, filter 속성을 사용하여 블러 처리
+  ${({ soldOut }) =>
+    soldOut &&
+    css`
+      filter: blur(2px);
+      opacity: 0.7;
+    `}
+`;
+const StImg = styled.img`
+  width: 100%;
+  height: 100%;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+`;
+const StP = styled.p`
+  font-size: 15px;
+  font-weight: bold;
+  padding-left: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  ${({ maxLength }) =>
+    maxLength &&
+    css`
+      max-width: ${maxLength * 1.1}ch;
+    `}
+`;
+const StP2 = styled.p`
+  font-size: 15px;
+  font-weight: bold;
+
+  margin-left: auto;
+  padding-right: 10px;
+`;
+
+const StFlexdiv = styled.div`
+  display: flex;
+  text-align: center;
+  background-color: tomato;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  margin-top: -3px;
+`;
+
+const StLink = styled(Link)`
+  text-decoration: none;
+  color: black;
 `;

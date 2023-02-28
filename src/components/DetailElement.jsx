@@ -6,19 +6,18 @@ import CommentModal from "./modal/CommentModal";
 import { instance } from "../api/axios";
 
 export default function DetailElement() {
-  const {id} = useParams();
+  const { id } = useParams();
   const [detail, setDetail] = useState({});
   const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const getPost = async () => {
-      const response = await instance.get("/post/2");
-      // const response = await instance.get(`/post/${id}`);
-      return response.data;
-    };
-    getPost().then((result) => setDetail(result))
-  }, [id]);
-
+  // useEffect(() => {
+  //   const getPost = async () => {
+  //     const response = await instance.get("/post/2");
+  //     // const response = await instance.get(`/post/${id}`);
+  //     return response.data;
+  //   };
+  //   getPost().then((result) => setDetail(result))
+  // }, [id]);
 
   return (
     <StDiv>
@@ -45,5 +44,5 @@ const StDiv = styled.div`
 const ImgBox = styled.img`
   width: 300px;
   height: 200px;
-  margin : 10px
+  margin: 10px;
 `;

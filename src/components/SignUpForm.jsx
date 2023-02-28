@@ -91,7 +91,7 @@ export default function SignUpForm() {
           onChange={handleEmailChange}
         />
       </div>
-      {isValidEmail ? <p>true</p> : <p>false</p>}
+      {isValidEmail ? <p>이메일 형식에 맞음</p> : <p>이메일 형식이 아닙니다</p>}
 
       <div>
         <input
