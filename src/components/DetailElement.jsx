@@ -4,19 +4,21 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import CommentModal from "./modal/CommentModal";
 import { baseURL } from "../api/axios";
-import { getDetailPost } from "../api/detail/getdetail";
+import { getDetailPost, DeletePost, EditPost } from "../api/detail/getdetail";
+import useInput from "../hooks/useInput";
 
 export default function DetailElement() {
   const { id } = useParams();
-
-  console.log(id);
+  // console.log(id);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const [detail, setDetail] = useState("");
-  const [updateImg, setUpDateImg] = useState("");
-  const [updateTitle, setupdateTitle] = useState("");
-  const [updateContent, setupdateImg] = useState("");
+
+  const [detail, setDetail] = useState('');
+  const [updateImg, onUpdateImg] = useState('');
+  const [updateTitle, onUpdateTitle] = useInput('');
+  const [updateContent, onUpdateContent] = useInput('');
+
 
   const fileInput = React.useRef(null);
   const onImgButton = (event) => {
@@ -24,65 +26,79 @@ export default function DetailElement() {
     fileInput.current.click();
   };
 
-  // const updateMutation = useMutation(updateBoard, {
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries("post");
-  //   },
-  // });
-  const mutation = useMutation(getDetailPost, {
-    onSuccess: () => {
-      queryClient.invalidateQueries("post");
-    },
-  });
 
+  // 전체 조회
   useEffect(() => {
     const getDetailPost = async () => {
-      const { data } = await baseURL.get(`/api/post/${id}`);
-      // const response = await baseURL.get('/api/post');
-      console.log(data);
-      return data;
+      const {data} = await baseURL.get(`/api/post/${id}`);
+      return data.response;
+
     };
     getDetailPost().then((result) => setDetail(result));
   }, [id]);
 
-  const onDeleteBtnHandler = (id) => {
-    const msg = window.confirm("삭제?");
-    if (msg) {
-      mutation.mutate(id);
-      navigate("/");
-    } else {
-      return;
+
+  //삭제
+  const DELETE_mutation = useMutation(DeletePost, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("lists")
     }
+  });
+
+  const onDeleteBtnHandler = (id) => {
+    DELETE_mutation.mutate(id);
+    console.log(id);
+    alert("Delete 완료");
+    navigate("/");
   };
 
-  // const onEditBtnHandler = (Id) => {
-  //   const msg = window.confirm("수정완료?");
-  //   if (!msg) {
-  //     return;
-  //   } else {
-  //     const payload = {
-  //       title: updateTitle,
-  //       content: updateContent,
-  //       file: updateImg,
-  //     };
-  //     updateMutation.mutate(payload);
-  //     setDetail(payload);
-  //     // onToggle();
-  //     alert("수정 완료!");
-  //   }
+ //수정
+  const Edit_Mutation = useMutation(EditPost, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("lists");
+    },
+  });
+
+  const onEditBtnHandler = () => {
+      Edit_Mutation.mutate();
+      setDetail();
+      alert("수정 완료!");
+  };
+  // const onSubmitPostHandler = async (event) => {
+  //   event.preventDefault();
+  //   if (newtitle.trim() === "" || newcontent.trim() === "") {
+  //     return alert("빈칸을 채워주세요");
+  //   } 
+
+  //   const formData = new FormData();
+  //   formData.append('title', updateTitle);
+  //   formData.append('content', updateContent);
+  //   formData.append('file', updateImg);
+  //   mutation.mutate(formData);
+  //   alert("수정 완료");
+  //   navigate(`/detail/${id}`);
   // };
 
   return (
     <StDiv>
-      <ImgBox src={detail.image}></ImgBox>
-      <h2>{detail.title}</h2>
-      <h5>{detail.content}</h5>
 
-      <div>
-        <button onClick={() => onDeleteBtnHandler(detail.id)}>삭제</button>
-        {/* <button onClick={() => onEditBtnHandler(detail.Id)}>수정</button> */}
-        <button>수정</button>
-      </div>
+      {detail.ismine ? (
+        <div>
+          <ImgBox src = {detail.image}></ImgBox>
+          <h2>{detail.title}</h2>
+          <h5>{detail.content}</h5>
+          <button onClick={() => onDeleteBtnHandler(detail.id)}>삭제</button>
+          <button onClick={() => onEditBtnHandler(detail.id)}>수정</button>
+          {/* <button>수정</button> */}
+        </div>
+      ):(
+        <div>
+          <ImgBox src = {detail.image}></ImgBox>
+          <h2>{detail.title}</h2>
+          <h5>{detail.content}</h5>
+        </div>
+      )}
+
 
       <CommentModal />
     </StDiv>
