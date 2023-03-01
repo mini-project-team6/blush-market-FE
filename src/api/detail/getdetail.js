@@ -14,7 +14,6 @@ const DeletePost = async (id) => {
 };
 
 const EditPost = async (payload) => {
-  console.log(payload);
   try {
     const response = await baseURL.patch(
       `/api/post/${payload.id}`,
@@ -22,7 +21,7 @@ const EditPost = async (payload) => {
         title: payload.title,
         content: payload.content,
         file: payload.file,
-        sellState: payload.sellStatus,
+        sellState: payload.sellState,
       },
       {
         headers: {
