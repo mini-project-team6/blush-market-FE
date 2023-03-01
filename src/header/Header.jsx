@@ -28,36 +28,60 @@ export default function Header() {
   };
   return (
     <Stdiv>
-      <button
+      <StHomebtn
         onClick={() => {
           window.location.href = "/";
         }}
       >
-        {" "}
-        Main{" "}
-      </button>
-      <Stlb>header</Stlb> <br />
+        <StyledImage
+          src={process.env.PUBLIC_URL + "/carrot_icon-icons.com_128.png"}
+        />
+      </StHomebtn>
+      <Stlb>홍당무 마켓</Stlb> <br />
       {!isLogin ? (
         <Stdiv2>
-          <Link to={"/login"}> 로그인</Link>
-          <Link to={"/signup"}> 회원가입</Link>
+          <StyledLink to={"/login"}> 로그인</StyledLink>
+          <StyledLink to={"/signup"}> 회원가입</StyledLink>
         </Stdiv2>
       ) : (
-        <button onClick={logoutHandler}>로그아웃</button>
+        <StHomebtn onClick={logoutHandler}>로그아웃</StHomebtn>
       )}
     </Stdiv>
   );
 }
 const Stdiv = styled.div`
   display: flex;
-  background-color: #e9e9e9;
+  background-color: tomato;
   padding: 10px;
 `;
 
 const Stlb = styled.label`
-  font-size: 20px;
+  font-size: 30px;
   margin: auto;
+  font-family: "Jalnan";
 `;
 const Stdiv2 = styled.div`
+  margin: 10px;
   gap: 50px;
+`;
+
+const StHomebtn = styled.button`
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: "Jalnan";
+  font-size: 18px;
+`;
+
+const StyledImage = styled.img`
+  width: 40px;
+  height: 40px;
+`;
+
+const StyledLink = styled(Link)`
+  font-family: "Jalnan";
+  text-align: center;
+  color: black;
+  text-decoration: none;
+  font-size: 18px;
 `;
