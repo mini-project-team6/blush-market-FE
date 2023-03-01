@@ -19,7 +19,7 @@ export default function DetailElement() {
   const [updateContent, setUpdateContent] = useState('');
   const [isEditMode, setIsEditMode] = useState(false);
   const [file, setFile] = useState("");
-  const [sellStatus, setSellStatus] = useState('');
+  const [sellState, setSellState] = useState('');
  
   const fileInput = React.useRef(null);
   const mutation = useMutation( {
@@ -88,28 +88,32 @@ export default function DetailElement() {
     formData.append("title", updateTitle);
     formData.append("content", updateContent);
     formData.append("file", file);
-    formData.append("sellStatus", sellStatus);
+    formData.append("sellState", sellState);
+
     const payload = {
       id : id,
       title: formData.get("title"),
       content : formData.get("content"),
       file : formData.get("file"),
-      sellStatus : formData.get("sellStatus"),
+      sellState : formData.get("sellState"),
     }
     Edit_Mutation.mutate(payload);
+    
     setDetail(payload.formData);
 
     console.log(formData.get("title"))
     console.log(formData.get("content"))
     console.log(payload.file)
-    console.log(formData.get("sellStatus"))
+    console.log(formData.get("sellState"))
     
     alert("수정 완료");
   };
 
   const radiocheck = (e) => {
     // console.log(e.target.value)
-    setSellStatus(e.target.value)
+    setSellState(e.target.value)
+    console.log(e.target.value)
+
   }
 
   function EditMode () {
@@ -155,15 +159,13 @@ export default function DetailElement() {
                 <div>
                   <input type="radio" id="SELL" name="radio_btn" value="0" onChange={radiocheck}/>
                   <label for="SELL">판매중</label>
-                  <input type="radio" id="SOLD" name="radio_btn" value="1" onChange={radiocheck}/>
+                  <input type="radio" id="SOLDOUT" name="radio_btn" value="1" onChange={radiocheck}/>
                   <label for="SOLD">판매완료</label>
                   
                 </div>
               </>
               <button size ='medium' className="editbitn" > 저장 </button>
-
             </form>
-            
             ) : (
               <>
                 <ImgBox src = {detail.image}></ImgBox>
@@ -174,118 +176,11 @@ export default function DetailElement() {
               </>
               )
           }
-          {/* 버튼영역 */}
-          {/* <div name= 'btns'>
-          {isEditMode? (
-            <>
-              <button size ='medium' className="editbitn" onClick={onSaveBtnHandler}> 저장 </button>
-            </>
-          ):(
-            <>
-              <button onClick={() => onDeleteBtnHandler(detail.id)}>삭제</button>
-              <button size ='medium' className="editbitn" onClick={EditMode}> 수정 </button>
-            </>
-          )}
-          </div> */}
-          
         </STdiv>
       </div>
-
     <CommentModal />
   </StDiv>
-
-)
-// return (
-//     <StDiv>
-//       {detail.ismine ? (   
-//       <div>
-//         <div>
-//           {/* 수정영역 */}
-//             {isEditMode? (
-//             <form onSubmit={onSubmitPostHandler} encType="multipart/form-data">  
-//               <>
-//               {/* <ImgBox src={onUpdateImg} ></ImgBox> */}
-//               <input
-//                   name="imgUpload"
-//                   type="file"
-//                   accept="image/*"
-//                   ref={fileInput}
-//                   // value = {updateImg}
-//                 />
-//               <StTxtarea
-//                 type='text'
-//                 name='title'
-//                 value={updateTitle}
-//                 onChange={(event)=> {
-//                 setDetail(event.target.value);
-//               }} />
-//                 <StTxtarea
-//                   type='text'
-//                   name='content'
-//                   value={updateContent}
-//                   onChange={(event)=> {
-//                   setDetail(event.target.value);
-//                 }} />
-//               </>
-//             </form>
-            
-//             ) : (
-//               <>
-//                 <ImgBox src = {detail.image}></ImgBox>
-//                 <div>{detail.title}</div>
-//                 <div> {detail.content} </div>  
-//               </>
-//               )
-//           }
-//           {/* 버튼영역 */}
-//           <div name= 'btns'>
-//           {isEditMode? (
-//             <>
-//               <button size ='medium' className="editbitn" onClick={onEditBtnHandler}> 저장 </button>
-//             </>
-//           ):(
-//             <>
-//               <button onClick={() => onDeleteBtnHandler(detail.id)}>삭제</button>
-//               <button size ='medium' className="editbitn" onClick={EditMode}> 수정 </button>
-//             </>
-//           )}
-//           </div>
-          
-//         </div>
-//       </div>
-//       ):(
-//       <div>
-//         <ImgBox src = {detail.image}></ImgBox>
-//         <h2>{detail.title}</h2>
-//         <h5>{detail.content}</h5>
-//       </div>
-//     )}
-//     <CommentModal />
-//   </StDiv>
-
-// )
-
-  // return (
-  //   <StDiv>
-  //     {detail.ismine ? (
-  //       <div>
-  //         <ImgBox src = {detail.image}></ImgBox>
-  //         <h2>{detail.title}</h2>
-  //         <h5>{detail.content}</h5>
-  //         <button onClick={() => onDeleteBtnHandler(detail.id)}>삭제</button>
-  //         <button onClick={() => onEditBtnHandler(detail.id)} >수정</button>
-  //         {/* <button>수정</button> */}
-  //       </div>
-  //     ):(
-  //       <div>
-  //         <ImgBox src = {detail.image}></ImgBox>
-  //         <h2>{detail.title}</h2>
-  //         <h5>{detail.content}</h5>
-  //       </div>
-  //     )}
-  //     <CommentModal />
-  //   </StDiv>
-  // );
+  )
 }
 
 const StDiv = styled.div`

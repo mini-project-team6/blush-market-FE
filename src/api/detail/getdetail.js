@@ -21,7 +21,7 @@ const EditPost = async (payload) => {
       title: payload.title,
       content : payload.content,
       file : payload.file,
-      sellStatus : payload.sellStatus
+      sellState : payload.sellState
     },
     {
       headers: {
