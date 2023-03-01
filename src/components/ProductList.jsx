@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import styled, { css } from "styled-components";
 
 function ProductList({ products }) {
-  console.log("prpr", products);
   return (
     <>
       <StGridDiv>
