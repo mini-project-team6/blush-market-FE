@@ -6,9 +6,9 @@ function ProductList({ products }) {
   return (
     <>
       <StGridDiv>
-        {products.map((target) => {
+        {products.map((target, index) => {
           return (
-            <StLink to={`detail/${target.id}`}>
+            <StLink to={`detail/${target.id}`} key={index}>
               <StCard key={target.id} soldOut={target.sellState !== "SELL"}>
                 <StImg alt="홍당무" src={target.image}></StImg>
                 <StFlexdiv>

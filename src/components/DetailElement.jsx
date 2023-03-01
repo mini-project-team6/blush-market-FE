@@ -19,13 +19,9 @@ export default function DetailElement() {
   const [updateContent, setUpdateContent] = useState("");
   const [isEditMode, setIsEditMode] = useState(false);
   const [file, setFile] = useState("");
-<<<<<<< HEAD
-  const [sellStatus, setSellStatus] = useState(0);
 
-=======
-  const [sellState, setSellState] = useState('');
- 
->>>>>>> 7456283d7ae2787b35736d90b01eccb36750af9a
+  const [sellState, setSellState] = useState("");
+
   const fileInput = React.useRef(null);
   const mutation = useMutation({
     onSuccess: () => {
@@ -97,49 +93,30 @@ export default function DetailElement() {
     const payload = {
       id: id,
       title: formData.get("title"),
-<<<<<<< HEAD
+
       content: formData.get("content"),
       file: formData.get("file"),
-      sellStatus: formData.get("sellStatus"),
+      sellState: formData.get("sellState"),
     };
     Edit_Mutation.mutate(payload);
     setDetail(payload.formData);
 
-    console.log(formData.get("title"));
-    console.log(formData.get("content"));
-    console.log(payload.file);
-    console.log(formData.get("sellStatus"));
-
-=======
-      content : formData.get("content"),
-      file : formData.get("file"),
-      sellState : formData.get("sellState"),
-    }
-    Edit_Mutation.mutate(payload);
-    setDetail(payload.formData);
-    
->>>>>>> 7456283d7ae2787b35736d90b01eccb36750af9a
     alert("수정 완료");
-    navigate(`/detail/${payload.id}`)
+    navigate(`/detail/${payload.id}`);
   };
 
   const radiocheck = (e) => {
-<<<<<<< HEAD
-    setSellStatus(parseInt(e.target.value));
-    console.log(typeof sellStatus);
-=======
     // console.log(e.target.value)
-    setSellState(e.target.value)
-  }
-
-  function EditMode () {
-    setIsEditMode(true)
-    setUpdateTitle(detail.title)
-    setUpdateContent(detail.content)
-    setUpdateImg(detail.image)
-    console.log(detail.image)
->>>>>>> 7456283d7ae2787b35736d90b01eccb36750af9a
+    setSellState(e.target.value);
   };
+
+  function EditMode() {
+    setIsEditMode(true);
+    setUpdateTitle(detail.title);
+    setUpdateContent(detail.content);
+    setUpdateImg(detail.image);
+    console.log(detail.image);
+  }
 
   function EditMode() {
     setIsEditMode(true);
@@ -201,7 +178,7 @@ export default function DetailElement() {
                   <label for="SOLD">판매완료</label>
                 </div>
               </>
-<<<<<<< HEAD
+
               <button size="medium" className="editbitn">
                 {" "}
                 저장{" "}
@@ -221,33 +198,6 @@ export default function DetailElement() {
               </button>
             </>
           )}
-          {/* 버튼영역 */}
-          {/* <div name= 'btns'>
-          {isEditMode? (
-            <>
-              <button size ='medium' className="editbitn" onClick={onSaveBtnHandler}> 저장 </button>
-            </>
-          ):(
-            <>
-              <button onClick={() => onDeleteBtnHandler(detail.id)}>삭제</button>
-              <button size ='medium' className="editbitn" onClick={EditMode}> 수정 </button>
-            </>
-          )}
-          </div> */}
-=======
-              <button size ='medium' className="editbitn" > 저장 </button>
-            </form>
-            ) : (
-              <>
-                <ImgBox src = {detail.image}></ImgBox>
-                <div>{detail.title}</div>
-                <div> {detail.content} </div>  
-                <button onClick={() => onDeleteBtnHandler(detail.id)}>삭제</button>
-              <button size ='medium' className="editbitn" onClick={EditMode} > 수정 </button>
-              </>
-              )
-          }        
->>>>>>> 7456283d7ae2787b35736d90b01eccb36750af9a
         </STdiv>
       </div>
 
