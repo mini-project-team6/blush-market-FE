@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useMutation } from "react-query";
+import { useNavigate } from "react-router-dom";
 import { getCheckId, postSignup } from "../api/signup/login";
+import { suseSweet } from "../utils/useSweet";
 
 export default function SignUpForm() {
   const [userid, setUserid] = useState("");
@@ -11,15 +13,18 @@ export default function SignUpForm() {
 
   const [ischeck, setIscheck] = useState(false);
   const [isname, setIsname] = useState(false);
+  const [isemailcheck, setIsemailcheck] = useState(false);
   const [passwordMatch, setPasswordMatch] = useState(false);
   const [isValidPassword, setIsValidPassword] = useState(false);
   const [isValidEmail, setIsValidEmail] = useState(false);
 
+  const navigate = useNavigate();
   // const client = useQueryClient();
   const signUpMutation = useMutation(postSignup, {
     onSuccess: (response) => {
       console.log(response);
       alert("회원가입 성공?");
+      navigate("/login");
     },
     onError: (response) => {
       console.log(response);
@@ -29,8 +34,13 @@ export default function SignUpForm() {
 
   const checkIdMutation = useMutation(getCheckId, {
     onSuccess: (response) => {
-      console.log(response);
-      setIsname(response);
+      response ? setIsname(true) : setIsname(false);
+      if (response) {
+        setIsname(true);
+        suseSweet(1000, "success", "사용가능");
+      } else {
+        setIsname(false);
+      }
     },
   });
 
@@ -39,6 +49,7 @@ export default function SignUpForm() {
   //   console.log(userid);
 
   const checkID = (e) => {
+    if (!e.target.value.trim()) return;
     setIscheck(true);
     checkIdMutation.mutate(e.target.value);
   };
@@ -90,27 +101,30 @@ export default function SignUpForm() {
           value={useremail}
           onChange={handleEmailChange}
         />
-      </div>
-      {isValidEmail ? <p>이메일 형식에 맞음</p> : <p>이메일 형식이 아닙니다</p>}
 
-      <div>
-        <input
-          type="text"
-          style={{ width: "270px" }}
-          placeholder="아이디"
-          value={userid}
-          onChange={(e) => setUserid(e.target.value)}
-        />
         <button
           type="button"
-          value={userid}
+          disabled={!isValidEmail}
+          value={useremail}
           style={{ width: "80px" }}
           onClick={checkID}
         >
           중복확인
         </button>
       </div>
-      {ischeck ? !isname ? <p>이미 사용중</p> : <p>사용가능한 아이디</p> : null}
+      {/* {ischeck ? !isname ? <p>사용불가</p> : <p>사용가능한 닉네임</p> : null} */}
+      {isValidEmail ? <p>이메일 형식에 맞음</p> : <p>이메일 형식이 아닙니다</p>}
+
+      <div>
+        <input
+          type="text"
+          style={{ width: "270px" }}
+          placeholder="닉네임"
+          value={userid}
+          onChange={(e) => setUserid(e.target.value)}
+        />
+      </div>
+
       {/* {!isname ? <p>이미 사용중</p> : <p>사용가능한 아이디</p>} */}
       <div>
         <input

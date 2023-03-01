@@ -19,7 +19,7 @@ export default function DetailElement() {
   const [updateContent, setUpdateContent] = useState('');
   const [isEditMode, setIsEditMode] = useState(false);
   const [file, setFile] = useState("");
-  const [sellState, setSellState] = useState('');
+  const [sellStatus, setSellStatus] = useState('');
  
   const fileInput = React.useRef(null);
   const mutation = useMutation( {
@@ -28,21 +28,22 @@ export default function DetailElement() {
     },
   });
 
+
   // 전체 조회
   useEffect(() => {
     const getDetailPost = async () => {
-      const {data} = await baseURL.get(`/api/post/${id}`);
+      const { data } = await baseURL.get(`/api/post/${id}`);
+      console.log(data);
       return data.response;
     };
     getDetailPost().then((result) => setDetail(result));
   }, [id]);
 
-
   //삭제
   const DELETE_mutation = useMutation(DeletePost, {
     onSuccess: () => {
-      queryClient.invalidateQueries("lists")
-    }
+      queryClient.invalidateQueries("lists");
+    },
   });
 
   const onDeleteBtnHandler = (id) => {
@@ -52,7 +53,7 @@ export default function DetailElement() {
     navigate("/");
   };
 
- //수정
+  //수정
   const Edit_Mutation = useMutation(EditPost, {
     onSuccess: () => {
       queryClient.invalidateQueries("lists");
@@ -88,32 +89,28 @@ export default function DetailElement() {
     formData.append("title", updateTitle);
     formData.append("content", updateContent);
     formData.append("file", file);
-    formData.append("sellState", sellState);
-
+    formData.append("sellStatus", sellStatus);
     const payload = {
       id : id,
       title: formData.get("title"),
       content : formData.get("content"),
       file : formData.get("file"),
-      sellState : formData.get("sellState"),
+      sellStatus : formData.get("sellStatus"),
     }
     Edit_Mutation.mutate(payload);
-    
     setDetail(payload.formData);
 
     console.log(formData.get("title"))
     console.log(formData.get("content"))
     console.log(payload.file)
-    console.log(formData.get("sellState"))
+    console.log(formData.get("sellStatus"))
     
     alert("수정 완료");
   };
 
   const radiocheck = (e) => {
     // console.log(e.target.value)
-    setSellState(e.target.value)
-    console.log(e.target.value)
-
+    setSellStatus(e.target.value)
   }
 
   function EditMode () {
@@ -159,13 +156,15 @@ export default function DetailElement() {
                 <div>
                   <input type="radio" id="SELL" name="radio_btn" value="0" onChange={radiocheck}/>
                   <label for="SELL">판매중</label>
-                  <input type="radio" id="SOLDOUT" name="radio_btn" value="1" onChange={radiocheck}/>
+                  <input type="radio" id="SOLD" name="radio_btn" value="1" onChange={radiocheck}/>
                   <label for="SOLD">판매완료</label>
                   
                 </div>
               </>
               <button size ='medium' className="editbitn" > 저장 </button>
+
             </form>
+            
             ) : (
               <>
                 <ImgBox src = {detail.image}></ImgBox>
@@ -176,11 +175,28 @@ export default function DetailElement() {
               </>
               )
           }
+          {/* 버튼영역 */}
+          {/* <div name= 'btns'>
+          {isEditMode? (
+            <>
+              <button size ='medium' className="editbitn" onClick={onSaveBtnHandler}> 저장 </button>
+            </>
+          ):(
+            <>
+              <button onClick={() => onDeleteBtnHandler(detail.id)}>삭제</button>
+              <button size ='medium' className="editbitn" onClick={EditMode}> 수정 </button>
+            </>
+          )}
+          </div> */}
+          
         </STdiv>
       </div>
+
     <CommentModal />
   </StDiv>
-  )
+
+)
+
 }
 
 const StDiv = styled.div`
