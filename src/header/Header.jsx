@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useMutation } from "react-query";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { getlogoutID } from "../api/signup/login";
 
 export default function Header() {
   const [isLogin, setisLogin] = useState(false);
@@ -13,12 +15,16 @@ export default function Header() {
     }
   }, [isLogin]);
 
-  const navigate = useNavigate();
-
+  const logoutMutation = useMutation(getlogoutID, {
+    onSuccess: () => {
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
+      window.location.href = "/";
+    },
+  });
   const logoutHandler = () => {
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("refresh_token");
-    window.location.href = "/";
+    const refresh_token = localStorage.getItem("refresh_token");
+    logoutMutation.mutate(refresh_token);
   };
   return (
     <Stdiv>
