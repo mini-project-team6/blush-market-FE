@@ -13,27 +13,15 @@ export default function DetailElement() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const [detail, setDetail] = useState('');
-  const [updateImg, setUpdateImg] = useState('');
-  const [updateTitle, setUpdateTitle] = useState('');
-  const [updateContent, setUpdateContent] = useState('');
+  const [detail, setDetail] = useState("");
+  const [updateImg, setUpdateImg] = useState("");
+  const [updateTitle, setUpdateTitle] = useState("");
+  const [updateContent, setUpdateContent] = useState("");
   const [isEditMode, setIsEditMode] = useState(false);
   const [file, setFile] = useState("");
-  const [sellState, setSellState] = useState(0);
- 
+  const [sellState, setSellState] = useState("");
+
   const fileInput = React.useRef(null);
-  // const mutation = useMutation( {
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries("lists");
-  //   },
-  // });
-
-  // const {data} = useQuery("lists", getDetailPost, {
-  //   onSuccess: () => {
-  //     console.log("data", data)
-  //   },
-  // });
-
 
   // 전체 조회
   useEffect(() => {
@@ -85,7 +73,7 @@ export default function DetailElement() {
     event.preventDefault();
     if (updateTitle.trim() === "" || updateContent.trim() === "" ) {
       return alert("빈칸을 채워주세요");
-    } 
+    }
     const formData = new FormData();
   
       formData.append("title", updateTitle);
@@ -110,8 +98,8 @@ export default function DetailElement() {
 
   const radiocheck = (e) => {
     // console.log(e.target.value)
-    setSellState(e.target.value)
-  }
+    setSellState(e.target.value);
+  };
 
   function EditMode () {
     setIsEditMode(true)
@@ -124,13 +112,13 @@ export default function DetailElement() {
   };
 
   return (
-    <StDiv>  
+    <StDiv>
       <div>
         {detail?.ismine?(
         <STdiv>
           {/* 수정영역 */}
-            {isEditMode? (
-            <form onSubmit={onSubmitPostHandler} encType="multipart/form-data">  
+          {isEditMode ? (
+            <form onSubmit={onSubmitPostHandler} encType="multipart/form-data">
               <>
               <ImgBox src={updateImg} alt="image"/>
               <input
@@ -140,20 +128,22 @@ export default function DetailElement() {
                   ref={fileInput}
                   onChange={onImgPostHandler}
                 />
-              <StTxtarea
-                type='text'
-                name='updateTitle'
-                value={updateTitle}
-                onChange={(event)=> {
-                  setUpdateTitle(event.target.value); }} 
+                <StTxtarea
+                  type="text"
+                  name="updateTitle"
+                  value={updateTitle}
+                  onChange={(event) => {
+                    setUpdateTitle(event.target.value);
+                  }}
                 />
                 <StTxtarea
-                  type='text'
-                  name='updateContent'
+                  type="text"
+                  name="updateContent"
                   value={updateContent}
-                  onChange={(event)=> {
+                  onChange={(event) => {
                     setUpdateContent(event.target.value);
-                }} />
+                  }}
+                />
                 <div>
                   <input 
                     type="radio" 
@@ -173,7 +163,11 @@ export default function DetailElement() {
                   <label htmlFor="SOLD">판매완료</label>
                 </div>
               </>
-              <button size ='medium' className="editbitn" > 저장 </button>
+
+              <button size="medium" className="editbitn">
+                {" "}
+                저장{" "}
+              </button>
             </form>
             ) : (
               <div>
@@ -182,7 +176,8 @@ export default function DetailElement() {
                 <div> {detail.content} </div>  
                 <p>
                   {detail.sellState === "SELL" ? "판매중" : "판매완료"}
-                </p>                <button onClick={() => onDeleteBtnHandler(detail.id)}>삭제</button>
+                </p> 
+                <button onClick={() => onDeleteBtnHandler(detail.id)}>삭제</button>
               <button size ='medium' className="editbitn" onClick={EditMode} > 수정 </button>
               </div>
               )
@@ -201,11 +196,9 @@ export default function DetailElement() {
         )}
       </div>
 
-    <CommentModal />
-  </StDiv>
-
-)
-
+      <CommentModal />
+    </StDiv>
+  );
 }
 
 const StDiv = styled.div`
@@ -216,9 +209,9 @@ const StDiv = styled.div`
   flex-direction: column;
   gap: 20px;
 `;
-const STdiv= styled.div`
-  width : 400px;
-`
+const STdiv = styled.div`
+  width: 400px;
+`;
 const ImgBox = styled.img`
   width: 300px;
   height: 300px;
@@ -228,9 +221,9 @@ const ImgBox = styled.img`
 `;
 
 const StTxtarea = styled.textarea`
-  margin : 20px 35px;
-  height : 50px;
-  width : 46rem;
-  border-radius : 20px;
-  padding : 10px;
-`
+  margin: 20px 35px;
+  height: 50px;
+  width: 46rem;
+  border-radius: 20px;
+  padding: 10px;
+`;
