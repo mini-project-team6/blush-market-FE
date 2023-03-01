@@ -19,21 +19,9 @@ export default function DetailElement() {
   const [updateContent, setUpdateContent] = useState('');
   const [isEditMode, setIsEditMode] = useState(false);
   const [file, setFile] = useState("");
-  const [sellState, setSellState] = useState(0);
+  const [sellState, setSellState] = useState("");
  
   const fileInput = React.useRef(null);
-  // const mutation = useMutation( {
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries("lists");
-  //   },
-  // });
-
-  // const {data} = useQuery("lists", getDetailPost, {
-  //   onSuccess: () => {
-  //     console.log("data", data)
-  //   },
-  // });
-
 
   // 전체 조회
   useEffect(() => {
@@ -161,7 +149,8 @@ export default function DetailElement() {
                     name="radio_btn" 
                     value="0" 
                     onChange={radiocheck} 
-                    />
+                    required
+                    checked={detail.sellState === "SELL" ? true : false}/>
                   <label htmlFor="SELL">판매중</label>
                   <input 
                     type="radio" 
@@ -169,7 +158,8 @@ export default function DetailElement() {
                     name="radio_btn" 
                     value="1" 
                     onChange={radiocheck}
-                    />
+                    required
+                    checked={detail.sellState === "SOLDOUT" ? true : false}/>
                   <label htmlFor="SOLD">판매완료</label>
                 </div>
               </>
@@ -182,7 +172,8 @@ export default function DetailElement() {
                 <div> {detail.content} </div>  
                 <p>
                   {detail.sellState === "SELL" ? "판매중" : "판매완료"}
-                </p>                <button onClick={() => onDeleteBtnHandler(detail.id)}>삭제</button>
+                </p>                
+                <button onClick={() => onDeleteBtnHandler(detail.id)}>삭제</button>
               <button size ='medium' className="editbitn" onClick={EditMode} > 수정 </button>
               </div>
               )
@@ -190,7 +181,7 @@ export default function DetailElement() {
         </STdiv>
         ):(
           <>
-            <ImgBox src = {detail.image}> </ImgBox>
+            <ImgBox src = {detail.image}></ImgBox>
             <div> {detail.title} </div>
             <div> {detail.content} </div>  
             <p>
