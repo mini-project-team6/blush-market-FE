@@ -19,7 +19,7 @@ export default function DetailElement() {
   const [updateContent, setUpdateContent] = useState('');
   const [isEditMode, setIsEditMode] = useState(false);
   const [file, setFile] = useState("");
-  const [sellStatus, setSellStatus] = useState('');
+  const [sellState, setSellState] = useState('');
  
   const fileInput = React.useRef(null);
   const mutation = useMutation( {
@@ -89,28 +89,24 @@ export default function DetailElement() {
     formData.append("title", updateTitle);
     formData.append("content", updateContent);
     formData.append("file", file);
-    formData.append("sellStatus", sellStatus);
+    formData.append("sellState", sellState);
     const payload = {
       id : id,
       title: formData.get("title"),
       content : formData.get("content"),
       file : formData.get("file"),
-      sellStatus : formData.get("sellStatus"),
+      sellState : formData.get("sellState"),
     }
     Edit_Mutation.mutate(payload);
     setDetail(payload.formData);
-
-    console.log(formData.get("title"))
-    console.log(formData.get("content"))
-    console.log(payload.file)
-    console.log(formData.get("sellStatus"))
     
     alert("수정 완료");
+    navigate(`/detail/${payload.id}`)
   };
 
   const radiocheck = (e) => {
     // console.log(e.target.value)
-    setSellStatus(e.target.value)
+    setSellState(e.target.value)
   }
 
   function EditMode () {
@@ -125,7 +121,6 @@ export default function DetailElement() {
     <StDiv>  
       <div>
         <STdiv>
-          
           {/* 수정영역 */}
             {isEditMode? (
             <form onSubmit={onSubmitPostHandler} encType="multipart/form-data">  
@@ -162,9 +157,7 @@ export default function DetailElement() {
                 </div>
               </>
               <button size ='medium' className="editbitn" > 저장 </button>
-
             </form>
-            
             ) : (
               <>
                 <ImgBox src = {detail.image}></ImgBox>
@@ -174,21 +167,7 @@ export default function DetailElement() {
               <button size ='medium' className="editbitn" onClick={EditMode} > 수정 </button>
               </>
               )
-          }
-          {/* 버튼영역 */}
-          {/* <div name= 'btns'>
-          {isEditMode? (
-            <>
-              <button size ='medium' className="editbitn" onClick={onSaveBtnHandler}> 저장 </button>
-            </>
-          ):(
-            <>
-              <button onClick={() => onDeleteBtnHandler(detail.id)}>삭제</button>
-              <button size ='medium' className="editbitn" onClick={EditMode}> 수정 </button>
-            </>
-          )}
-          </div> */}
-          
+          }        
         </STdiv>
       </div>
 
