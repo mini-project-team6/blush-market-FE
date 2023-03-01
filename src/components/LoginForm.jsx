@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useMutation } from "react-query";
 import { postLogin } from "../api/signup/login";
+import { useNavigate } from "react-router-dom";
 export default function LoginForm() {
+  const navigate = useNavigate();
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
 
@@ -32,6 +34,7 @@ export default function LoginForm() {
         // localStorage.setItem("access_token_expire", expires_access_token);
         // localStorage.setItem("refresh_token_expire", expires_refresh_token);
         alert("로그인 성공?");
+        window.location.href = "/";
       } else {
         alert("로그인 실패?");
       }

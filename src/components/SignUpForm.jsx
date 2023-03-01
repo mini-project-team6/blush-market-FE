@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useMutation } from "react-query";
+import { useNavigate } from "react-router-dom";
 import { getCheckId, postSignup } from "../api/signup/login";
 
 export default function SignUpForm() {
@@ -15,11 +16,13 @@ export default function SignUpForm() {
   const [isValidPassword, setIsValidPassword] = useState(false);
   const [isValidEmail, setIsValidEmail] = useState(false);
 
+  const navigate = useNavigate();
   // const client = useQueryClient();
   const signUpMutation = useMutation(postSignup, {
     onSuccess: (response) => {
       console.log(response);
       alert("회원가입 성공?");
+      navigate("/login");
     },
     onError: (response) => {
       console.log(response);
