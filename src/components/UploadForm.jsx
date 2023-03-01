@@ -4,7 +4,6 @@ import { useMutation, useQueryClient  } from "react-query";
 import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
 import { uploadPost } from "../api/uploadApi/upload";
-import { useNavigate } from "react-router-dom";
 
 const UploadForm = () => {
   const navigate = useNavigate();
@@ -49,16 +48,17 @@ const UploadForm = () => {
 
   const onSubmitPostHandler = async (event) => {
     event.preventDefault();
-    if (newtitle.trim() === "" || newcontent.trim() === "") {
+    if (newtitle.trim() === "" || newcontent.trim() === "" ) {
       return alert("빈칸을 채워주세요");
-
     } 
-
 
     const formData = new FormData();
     formData.append("title", newtitle);
     formData.append("content", newcontent);
     formData.append("file", file);
+
+    console.log(formData.get("file"))
+
     mutation.mutate(formData);
 
     alert("업로드 완료");
@@ -76,7 +76,7 @@ const UploadForm = () => {
           type="text"
           value={newcontent}
           onChange={onContentHandler}
-        />{" "}
+        />
         <br />
         <StpicInput
           name="imgUpload"
@@ -85,11 +85,12 @@ const UploadForm = () => {
           ref={fileInput}
           // value = {newimage}
           onChange={onImgPostHandler}
+          // onClick={onImgButton}
         />
-        <StuploadBtn onClick={onImgButton}> 파일 업로드 </StuploadBtn>
+        {/* <StuploadBtn onClick={onImgButton}> 파일 업로드 </StuploadBtn> */}
         <div>
           <ImgBox src={newimage} alt="img" />
-        </div>{" "}
+        </div>
         <br />
         <StupicBtn> 업로드 </StupicBtn>
       </StCard>

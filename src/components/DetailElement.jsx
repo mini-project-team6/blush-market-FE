@@ -13,26 +13,26 @@ export default function DetailElement() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-
   const [detail, setDetail] = useState('');
-  const [updateImg, onUpdateImg] = useState('');
-  const [updateTitle, onUpdateTitle] = useInput('');
-  const [updateContent, onUpdateContent] = useInput('');
-
-
+  const [updateImg, setUpdateImg] = useState('');
+  const [updateTitle, setUpdateTitle] = useState('');
+  const [updateContent, setUpdateContent] = useState('');
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [file, setFile] = useState("");
+  const [sellStatus, setSellStatus] = useState('');
+ 
   const fileInput = React.useRef(null);
-  const onImgButton = (event) => {
-    event.preventDefault();
-    fileInput.current.click();
-  };
-
+  const mutation = useMutation( {
+    onSuccess: () => {
+      queryClient.invalidateQueries("lists");
+    },
+  });
 
   // 전체 조회
   useEffect(() => {
     const getDetailPost = async () => {
       const {data} = await baseURL.get(`/api/post/${id}`);
       return data.response;
-
     };
     getDetailPost().then((result) => setDetail(result));
   }, [id]);
@@ -48,7 +48,7 @@ export default function DetailElement() {
   const onDeleteBtnHandler = (id) => {
     DELETE_mutation.mutate(id);
     console.log(id);
-    alert("Delete 완료");
+    alert("삭제 완료");
     navigate("/");
   };
 
@@ -59,50 +59,233 @@ export default function DetailElement() {
     },
   });
 
-  const onEditBtnHandler = () => {
-      Edit_Mutation.mutate();
-      setDetail();
-      alert("수정 완료!");
+  const onImgPostHandler = (event) => {
+    // console.log(event.target.files)
+    setUpdateImg([]);
+    // for (let i = 0; i < event.target.files.length; i++) {
+      setFile(event.target.files[0]);
+      let reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+      reader.addEventListener("loaded", (event) => {
+        updateImg.src = event.target.result;
+      });
+      reader.onloadend = () => {
+        const base = reader.result;
+        if (base) {
+          const baseSub = base.toString();
+          setUpdateImg((updateImg) => [...updateImg, baseSub]);
+        }
+      };
+    // }
   };
-  // const onSubmitPostHandler = async (event) => {
-  //   event.preventDefault();
-  //   if (newtitle.trim() === "" || newcontent.trim() === "") {
-  //     return alert("빈칸을 채워주세요");
-  //   } 
 
-  //   const formData = new FormData();
-  //   formData.append('title', updateTitle);
-  //   formData.append('content', updateContent);
-  //   formData.append('file', updateImg);
-  //   mutation.mutate(formData);
-  //   alert("수정 완료");
-  //   navigate(`/detail/${id}`);
-  // };
+  const onSubmitPostHandler = async (event) => {
+    event.preventDefault();
+    if (updateTitle.trim() === "" || updateContent.trim() === "") {
+      return alert("빈칸을 채워주세요");
+    } 
+    const formData = new FormData();
+    formData.append("title", updateTitle);
+    formData.append("content", updateContent);
+    formData.append("file", file);
+    formData.append("sellStatus", sellStatus);
+    const payload = {
+      id : id,
+      title: formData.get("title"),
+      content : formData.get("content"),
+      file : formData.get("file"),
+      sellStatus : formData.get("sellStatus"),
+    }
+    Edit_Mutation.mutate(payload);
+    setDetail(payload.formData);
+
+    console.log(formData.get("title"))
+    console.log(formData.get("content"))
+    console.log(payload.file)
+    console.log(formData.get("sellStatus"))
+    
+    alert("수정 완료");
+  };
+
+  const radiocheck = (e) => {
+    // console.log(e.target.value)
+    setSellStatus(e.target.value)
+  }
+
+  function EditMode () {
+    setIsEditMode(true)
+    setUpdateTitle(detail.title)
+    setUpdateContent(detail.content)
+    setUpdateImg(detail.image)
+    console.log(detail.image)
+  };
 
   return (
-    <StDiv>
+    <StDiv>  
+      <div>
+        <STdiv>
+          
+          {/* 수정영역 */}
+            {isEditMode? (
+            <form onSubmit={onSubmitPostHandler} encType="multipart/form-data">  
+              <>
+              <ImgBox url={setUpdateImg} alt="img" />
+              <input
+                  name="imgUpload"
+                  type="file"
+                  accept="image/*"
+                  ref={fileInput}
+                  // value = {updateImg}
+                  onChange={onImgPostHandler}
+                />
+              <StTxtarea
+                type='text'
+                name='updateTitle'
+                value={updateTitle}
+                onChange={(event)=> {
+                  setUpdateTitle(event.target.value); }} 
+                />
+                <StTxtarea
+                  type='text'
+                  name='updateContent'
+                  value={updateContent}
+                  onChange={(event)=> {
+                    setUpdateContent(event.target.value);
+                }} />
+                <div>
+                  <input type="radio" id="SELL" name="radio_btn" value="0" onChange={radiocheck}/>
+                  <label for="SELL">판매중</label>
+                  <input type="radio" id="SOLD" name="radio_btn" value="1" onChange={radiocheck}/>
+                  <label for="SOLD">판매완료</label>
+                  
+                </div>
+              </>
+              <button size ='medium' className="editbitn" > 저장 </button>
 
-      {detail.ismine ? (
-        <div>
-          <ImgBox src = {detail.image}></ImgBox>
-          <h2>{detail.title}</h2>
-          <h5>{detail.content}</h5>
-          <button onClick={() => onDeleteBtnHandler(detail.id)}>삭제</button>
-          <button onClick={() => onEditBtnHandler(detail.id)}>수정</button>
-          {/* <button>수정</button> */}
-        </div>
-      ):(
-        <div>
-          <ImgBox src = {detail.image}></ImgBox>
-          <h2>{detail.title}</h2>
-          <h5>{detail.content}</h5>
-        </div>
-      )}
+            </form>
+            
+            ) : (
+              <>
+                <ImgBox src = {detail.image}></ImgBox>
+                <div>{detail.title}</div>
+                <div> {detail.content} </div>  
+                <button onClick={() => onDeleteBtnHandler(detail.id)}>삭제</button>
+              <button size ='medium' className="editbitn" onClick={EditMode} > 수정 </button>
+              </>
+              )
+          }
+          {/* 버튼영역 */}
+          {/* <div name= 'btns'>
+          {isEditMode? (
+            <>
+              <button size ='medium' className="editbitn" onClick={onSaveBtnHandler}> 저장 </button>
+            </>
+          ):(
+            <>
+              <button onClick={() => onDeleteBtnHandler(detail.id)}>삭제</button>
+              <button size ='medium' className="editbitn" onClick={EditMode}> 수정 </button>
+            </>
+          )}
+          </div> */}
+          
+        </STdiv>
+      </div>
 
+    <CommentModal />
+  </StDiv>
 
-      <CommentModal />
-    </StDiv>
-  );
+)
+// return (
+//     <StDiv>
+//       {detail.ismine ? (   
+//       <div>
+//         <div>
+//           {/* 수정영역 */}
+//             {isEditMode? (
+//             <form onSubmit={onSubmitPostHandler} encType="multipart/form-data">  
+//               <>
+//               {/* <ImgBox src={onUpdateImg} ></ImgBox> */}
+//               <input
+//                   name="imgUpload"
+//                   type="file"
+//                   accept="image/*"
+//                   ref={fileInput}
+//                   // value = {updateImg}
+//                 />
+//               <StTxtarea
+//                 type='text'
+//                 name='title'
+//                 value={updateTitle}
+//                 onChange={(event)=> {
+//                 setDetail(event.target.value);
+//               }} />
+//                 <StTxtarea
+//                   type='text'
+//                   name='content'
+//                   value={updateContent}
+//                   onChange={(event)=> {
+//                   setDetail(event.target.value);
+//                 }} />
+//               </>
+//             </form>
+            
+//             ) : (
+//               <>
+//                 <ImgBox src = {detail.image}></ImgBox>
+//                 <div>{detail.title}</div>
+//                 <div> {detail.content} </div>  
+//               </>
+//               )
+//           }
+//           {/* 버튼영역 */}
+//           <div name= 'btns'>
+//           {isEditMode? (
+//             <>
+//               <button size ='medium' className="editbitn" onClick={onEditBtnHandler}> 저장 </button>
+//             </>
+//           ):(
+//             <>
+//               <button onClick={() => onDeleteBtnHandler(detail.id)}>삭제</button>
+//               <button size ='medium' className="editbitn" onClick={EditMode}> 수정 </button>
+//             </>
+//           )}
+//           </div>
+          
+//         </div>
+//       </div>
+//       ):(
+//       <div>
+//         <ImgBox src = {detail.image}></ImgBox>
+//         <h2>{detail.title}</h2>
+//         <h5>{detail.content}</h5>
+//       </div>
+//     )}
+//     <CommentModal />
+//   </StDiv>
+
+// )
+
+  // return (
+  //   <StDiv>
+  //     {detail.ismine ? (
+  //       <div>
+  //         <ImgBox src = {detail.image}></ImgBox>
+  //         <h2>{detail.title}</h2>
+  //         <h5>{detail.content}</h5>
+  //         <button onClick={() => onDeleteBtnHandler(detail.id)}>삭제</button>
+  //         <button onClick={() => onEditBtnHandler(detail.id)} >수정</button>
+  //         {/* <button>수정</button> */}
+  //       </div>
+  //     ):(
+  //       <div>
+  //         <ImgBox src = {detail.image}></ImgBox>
+  //         <h2>{detail.title}</h2>
+  //         <h5>{detail.content}</h5>
+  //       </div>
+  //     )}
+  //     <CommentModal />
+  //   </StDiv>
+  // );
 }
 
 const StDiv = styled.div`
@@ -113,9 +296,19 @@ const StDiv = styled.div`
   flex-direction: column;
   gap: 20px;
 `;
-
+const STdiv= styled.div`
+  width : 400px;
+`
 const ImgBox = styled.img`
   width: 300px;
   height: 200px;
   margin: 10px;
 `;
+
+const StTxtarea = styled.textarea`
+  margin : 20px 35px;
+  height : 50px;
+  width : 46rem;
+  border-radius : 20px;
+  padding : 10px;
+`

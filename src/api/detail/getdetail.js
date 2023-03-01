@@ -14,10 +14,21 @@ const DeletePost = async (id) => {
   }
 };
 
-const EditPost = async (id) => {
+const EditPost = async (payload) => {
   try{
-    const response = await baseURL.put(`/api/post/${id}`);
-    console.log(response)
+    const response = await baseURL.patch(`/api/post/${payload.id}`, 
+    {
+      title: payload.title,
+      content : payload.content,
+      file : payload.file,
+      sellStatus : payload.sellStatus
+    },
+    {
+      headers: {
+        "Content-Type": `multipart/form-data; `,
+        }
+    }
+    );
     return response;
   }
   catch{
