@@ -1,12 +1,32 @@
 import React, { useState } from "react";
+import { useMutation, useQueryClient } from "react-query";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import { baseURL } from "../../api/axios";
 import CommentList from "./CommentList";
 
 export default function CommentModalContent() {
+  const param = useParams();
   // const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const queryClient = useQueryClient();
+
+  const getCommentPost = async (content) => {
+    const data = await baseURL.post(`/api/post/comment/${param.id}`, {
+      content,
+    });
+  };
+  const commentMutation = useMutation(getCommentPost, {
+    onSettled: (response) => {
+      console.log("성공");
+      queryClient.invalidateQueries("details");
+    },
+  });
+
   function handleSubmit(event) {
     event.preventDefault();
+    commentMutation.mutate(content);
+    setContent("");
   }
   return (
     <>

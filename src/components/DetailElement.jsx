@@ -28,21 +28,22 @@ export default function DetailElement() {
     },
   });
 
+
   // 전체 조회
   useEffect(() => {
     const getDetailPost = async () => {
-      const {data} = await baseURL.get(`/api/post/${id}`);
+      const { data } = await baseURL.get(`/api/post/${id}`);
+      console.log(data);
       return data.response;
     };
     getDetailPost().then((result) => setDetail(result));
   }, [id]);
 
-
   //삭제
   const DELETE_mutation = useMutation(DeletePost, {
     onSuccess: () => {
-      queryClient.invalidateQueries("lists")
-    }
+      queryClient.invalidateQueries("lists");
+    },
   });
 
   const onDeleteBtnHandler = (id) => {
@@ -52,7 +53,7 @@ export default function DetailElement() {
     navigate("/");
   };
 
- //수정
+  //수정
   const Edit_Mutation = useMutation(EditPost, {
     onSuccess: () => {
       queryClient.invalidateQueries("lists");
@@ -195,97 +196,7 @@ export default function DetailElement() {
   </StDiv>
 
 )
-// return (
-//     <StDiv>
-//       {detail.ismine ? (   
-//       <div>
-//         <div>
-//           {/* 수정영역 */}
-//             {isEditMode? (
-//             <form onSubmit={onSubmitPostHandler} encType="multipart/form-data">  
-//               <>
-//               {/* <ImgBox src={onUpdateImg} ></ImgBox> */}
-//               <input
-//                   name="imgUpload"
-//                   type="file"
-//                   accept="image/*"
-//                   ref={fileInput}
-//                   // value = {updateImg}
-//                 />
-//               <StTxtarea
-//                 type='text'
-//                 name='title'
-//                 value={updateTitle}
-//                 onChange={(event)=> {
-//                 setDetail(event.target.value);
-//               }} />
-//                 <StTxtarea
-//                   type='text'
-//                   name='content'
-//                   value={updateContent}
-//                   onChange={(event)=> {
-//                   setDetail(event.target.value);
-//                 }} />
-//               </>
-//             </form>
-            
-//             ) : (
-//               <>
-//                 <ImgBox src = {detail.image}></ImgBox>
-//                 <div>{detail.title}</div>
-//                 <div> {detail.content} </div>  
-//               </>
-//               )
-//           }
-//           {/* 버튼영역 */}
-//           <div name= 'btns'>
-//           {isEditMode? (
-//             <>
-//               <button size ='medium' className="editbitn" onClick={onEditBtnHandler}> 저장 </button>
-//             </>
-//           ):(
-//             <>
-//               <button onClick={() => onDeleteBtnHandler(detail.id)}>삭제</button>
-//               <button size ='medium' className="editbitn" onClick={EditMode}> 수정 </button>
-//             </>
-//           )}
-//           </div>
-          
-//         </div>
-//       </div>
-//       ):(
-//       <div>
-//         <ImgBox src = {detail.image}></ImgBox>
-//         <h2>{detail.title}</h2>
-//         <h5>{detail.content}</h5>
-//       </div>
-//     )}
-//     <CommentModal />
-//   </StDiv>
 
-// )
-
-  // return (
-  //   <StDiv>
-  //     {detail.ismine ? (
-  //       <div>
-  //         <ImgBox src = {detail.image}></ImgBox>
-  //         <h2>{detail.title}</h2>
-  //         <h5>{detail.content}</h5>
-  //         <button onClick={() => onDeleteBtnHandler(detail.id)}>삭제</button>
-  //         <button onClick={() => onEditBtnHandler(detail.id)} >수정</button>
-  //         {/* <button>수정</button> */}
-  //       </div>
-  //     ):(
-  //       <div>
-  //         <ImgBox src = {detail.image}></ImgBox>
-  //         <h2>{detail.title}</h2>
-  //         <h5>{detail.content}</h5>
-  //       </div>
-  //     )}
-  //     <CommentModal />
-  //   </StDiv>
-  // );
 }
 
 const StDiv = styled.div`
