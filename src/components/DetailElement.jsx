@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import CommentModal from "./modal/CommentModal";
@@ -19,25 +19,31 @@ export default function DetailElement() {
   const [updateContent, setUpdateContent] = useState('');
   const [isEditMode, setIsEditMode] = useState(false);
   const [file, setFile] = useState("");
-  const [sellState, setSellState] = useState('');
+  const [sellState, setSellState] = useState(0);
  
   const fileInput = React.useRef(null);
-  const mutation = useMutation( {
-    onSuccess: () => {
-      queryClient.invalidateQueries("lists");
-    },
-  });
+  // const mutation = useMutation( {
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries("lists");
+  //   },
+  // });
+
+  // const {data} = useQuery("lists", getDetailPost, {
+  //   onSuccess: () => {
+  //     console.log("data", data)
+  //   },
+  // });
 
 
   // 전체 조회
   useEffect(() => {
     const getDetailPost = async () => {
       const { data } = await baseURL.get(`/api/post/${id}`);
-      console.log(data);
+      // console.log(data);
       return data.response;
     };
     getDetailPost().then((result) => setDetail(result));
-  }, [id]);
+  },[id]);
 
   //삭제
   const DELETE_mutation = useMutation(DeletePost, {
@@ -48,7 +54,7 @@ export default function DetailElement() {
 
   const onDeleteBtnHandler = (id) => {
     DELETE_mutation.mutate(id);
-    console.log(id);
+    // console.log(id);
     alert("삭제 완료");
     navigate("/");
   };
@@ -61,15 +67,11 @@ export default function DetailElement() {
   });
 
   const onImgPostHandler = (event) => {
-    // console.log(event.target.files)
     setUpdateImg([]);
-    // for (let i = 0; i < event.target.files.length; i++) {
       setFile(event.target.files[0]);
+
       let reader = new FileReader();
       reader.readAsDataURL(event.target.files[0]);
-      reader.addEventListener("loaded", (event) => {
-        updateImg.src = event.target.result;
-      });
       reader.onloadend = () => {
         const base = reader.result;
         if (base) {
@@ -77,31 +79,33 @@ export default function DetailElement() {
           setUpdateImg((updateImg) => [...updateImg, baseSub]);
         }
       };
-    // }
   };
 
   const onSubmitPostHandler = async (event) => {
     event.preventDefault();
-    if (updateTitle.trim() === "" || updateContent.trim() === "") {
+    if (updateTitle.trim() === "" || updateContent.trim() === "" ) {
       return alert("빈칸을 채워주세요");
     } 
     const formData = new FormData();
-    formData.append("title", updateTitle);
-    formData.append("content", updateContent);
-    formData.append("file", file);
-    formData.append("sellState", sellState);
-    const payload = {
-      id : id,
-      title: formData.get("title"),
-      content : formData.get("content"),
-      file : formData.get("file"),
-      sellState : formData.get("sellState"),
-    }
-    Edit_Mutation.mutate(payload);
-    setDetail(payload.formData);
+  
+      formData.append("title", updateTitle);
+      formData.append("content", updateContent);
+      formData.append("file", file);
+      formData.append("sellState", sellState);
+      const payload = {
+        id : id,
+        title: formData.get("title"),
+        content : formData.get("content"),
+        file : formData.get("file"),
+        sellState : formData.get("sellState"),
+      }
+      Edit_Mutation.mutate(payload);
+      setDetail(payload);
+      setUpdateImg(updateImg);
+      setFile(payload)
     
     alert("수정 완료");
-    navigate(`/detail/${payload.id}`)
+    navigate("/");
   };
 
   const radiocheck = (e) => {
@@ -114,24 +118,26 @@ export default function DetailElement() {
     setUpdateTitle(detail.title)
     setUpdateContent(detail.content)
     setUpdateImg(detail.image)
-    console.log(detail.image)
+    setFile(detail.file)
+    setSellState(detail.sellState)
+    // console.log(detail.image)
   };
 
   return (
     <StDiv>  
       <div>
+        {detail?.ismine?(
         <STdiv>
           {/* 수정영역 */}
             {isEditMode? (
             <form onSubmit={onSubmitPostHandler} encType="multipart/form-data">  
               <>
-              <ImgBox url={setUpdateImg} alt="img" />
+              <ImgBox src={updateImg} alt="image"/>
               <input
                   name="imgUpload"
                   type="file"
                   accept="image/*"
                   ref={fileInput}
-                  // value = {updateImg}
                   onChange={onImgPostHandler}
                 />
               <StTxtarea
@@ -149,26 +155,50 @@ export default function DetailElement() {
                     setUpdateContent(event.target.value);
                 }} />
                 <div>
-                  <input type="radio" id="SELL" name="radio_btn" value="0" onChange={radiocheck}/>
-                  <label for="SELL">판매중</label>
-                  <input type="radio" id="SOLD" name="radio_btn" value="1" onChange={radiocheck}/>
-                  <label for="SOLD">판매완료</label>
-                  
+                  <input 
+                    type="radio" 
+                    id="SELL"
+                    name="radio_btn" 
+                    value="0" 
+                    onChange={radiocheck} 
+                    />
+                  <label htmlFor="SELL">판매중</label>
+                  <input 
+                    type="radio" 
+                    id="SOLD" 
+                    name="radio_btn" 
+                    value="1" 
+                    onChange={radiocheck}
+                    />
+                  <label htmlFor="SOLD">판매완료</label>
                 </div>
               </>
               <button size ='medium' className="editbitn" > 저장 </button>
             </form>
             ) : (
-              <>
+              <div>
                 <ImgBox src = {detail.image}></ImgBox>
                 <div>{detail.title}</div>
                 <div> {detail.content} </div>  
-                <button onClick={() => onDeleteBtnHandler(detail.id)}>삭제</button>
+                <p>
+                  {detail.sellState === "SELL" ? "판매중" : "판매완료"}
+                </p>                <button onClick={() => onDeleteBtnHandler(detail.id)}>삭제</button>
               <button size ='medium' className="editbitn" onClick={EditMode} > 수정 </button>
-              </>
+              </div>
               )
           }        
         </STdiv>
+        ):(
+          <>
+            <ImgBox src = {detail.image}> </ImgBox>
+            <div> {detail.title} </div>
+            <div> {detail.content} </div>  
+            <p>
+              {detail.sellState === "SELL" ? "판매중" : "판매완료"}
+            </p>
+
+          </>
+        )}
       </div>
 
     <CommentModal />
@@ -191,8 +221,10 @@ const STdiv= styled.div`
 `
 const ImgBox = styled.img`
   width: 300px;
-  height: 200px;
+  height: 300px;
   margin: 10px;
+  background: no-repeat center/100%;
+  background-size: cover;
 `;
 
 const StTxtarea = styled.textarea`

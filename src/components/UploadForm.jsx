@@ -52,7 +52,6 @@ const UploadForm = () => {
       return alert("빈칸을 채워주세요");
     } 
 
-
     const formData = new FormData();
     formData.append("title", newtitle);
     formData.append("content", newcontent);
@@ -67,7 +66,7 @@ const UploadForm = () => {
   };
 
   return (
-    <form onSubmit={onSubmitPostHandler} encType="multipart/form-data">
+    <form name='post' onSubmit={onSubmitPostHandler} encType="multipart/form-data">
       <StCard>
         <label> Title </label>
         <br />
@@ -84,7 +83,6 @@ const UploadForm = () => {
           type="file"
           accept="image/*"
           ref={fileInput}
-          // value = {newimage}
           onChange={onImgPostHandler}
           // onClick={onImgButton}
         />
