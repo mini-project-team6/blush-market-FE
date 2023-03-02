@@ -39,7 +39,7 @@ export default function Header() {
           src={process.env.PUBLIC_URL + "/carrot_icon-icons.com_128.png"}
         />
       </StHomebtn>
-      <StHeaderLink to={"/"}>홍당무 마켓</StHeaderLink> <br />
+      <StHeader>홍당무 마켓</StHeader> <br />
       {!isLogin ? (
         <StUserDiv>
           <StLoginLink to={"/login"}>로그인</StLoginLink>
@@ -63,7 +63,7 @@ const StUserDiv = styled.div`
   gap: 50px;
 `;
 
-const StHeaderLink = styled(Link)`
+const StHeader = styled.div`
   font-size: 40px;
   margin: auto;
   padding-left : 7rem;

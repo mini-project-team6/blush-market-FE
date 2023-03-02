@@ -69,6 +69,9 @@ export default function DetailElement() {
     if (updateTitle.trim() === "" || updateContent.trim() === "") {
       return alert("빈칸을 채워주세요");
     }
+    else if (!file) {
+      return alert("사진을 다시 올려주세요!");
+    }
     const formData = new FormData();
 
     formData.append("title", updateTitle);
@@ -105,68 +108,64 @@ export default function DetailElement() {
   return (
     <StDiv>
       <div>
-        {detail?.ismine ? (
-          <STdiv>
-            {/* 수정영역 */}
-            {isEditMode ? (
-              <form
-                onSubmit={onSubmitPostHandler}
-                encType="multipart/form-data"
-              >
-                <>
-                  <ImgBox src={updateImg} alt="image" />
-                  <div>
-                    <p />
-                    <Stlb htmlFor="input-file">파일 업로드</Stlb> <p />
-                    <input
-                      id="input-file"
-                      name="imgUpload"
-                      type="file"
-                      accept="image/*"
-                      ref={fileInput}
-                      onChange={onImgPostHandler}
-                      style={{ display: "none" }}
-                    />
-                  </div>
-                  <StTxtarea
-                    type="text"
-                    name="updateTitle"
-                    value={updateTitle}
-                    onChange={(event) => {
-                      setUpdateTitle(event.target.value);
-                    }}
-                  />
-                  <StTxtarea
-                    type="text"
-                    name="updateContent"
-                    value={updateContent}
-                    onChange={(event) => {
-                      setUpdateContent(event.target.value);
-                    }}
-                  />
-                  <div>
-                    <input
-                      type="radio"
-                      id="SELL"
-                      name="radio_btn"
-                      value="0"
-                      onChange={radiocheck}
-                      check={detail.sellState === "SELL" ? true : false}
-                    />
-                    <label htmlFor="SELL">판매중</label>
-                    <input
-                      type="radio"
-                      id="SOLD"
-                      name="radio_btn"
-                      value="1"
-                      onChange={radiocheck}
-                      check={detail.sellState === "SOLDOUT" ? true : false}
-                    />
-                    <label htmlFor="SOLD">판매완료</label> <p />
-                  </div>
-                </>
-                <StEditBtn>저장</StEditBtn>
-              </form>
+        {detail?.ismine?(
+        <STdiv>
+          {/* 수정영역 */}
+          {isEditMode ? (
+            <form onSubmit={onSubmitPostHandler} encType="multipart/form-data">
+              <>
+              <ImgBox src={updateImg} alt="image"/>
+              <div>
+              <p /><Stlb htmlFor="input-file">파일 업로드</Stlb> <p />
+              <input
+                id="input-file"
+                name="imgUpload"
+                type="file"
+                accept="image/*"
+                ref={fileInput}
+                src={file}
+                onChange={onImgPostHandler}
+                style={{display:"none"}}
+              />
+                </div>
+                <StTxtarea
+                  type="text"
+                  name="updateTitle"
+                  value={updateTitle}
+                  onChange={(event) => {
+                    setUpdateTitle(event.target.value);
+                  }}
+                />
+                <StTxtarea
+                  type="text"
+                  name="updateContent"
+                  value={updateContent}
+                  onChange={(event) => {
+                    setUpdateContent(event.target.value);
+                  }}
+                />
+                <div>
+                  <input 
+                    type="radio" 
+                    id="SELL"
+                    name="radio_btn" 
+                    value="0" 
+                    onChange={radiocheck} 
+                    check={detail.sellState === "SELL" ? true : false}/>
+                  <label htmlFor="SELL">판매중</label> 
+                  <input 
+                    type="radio" 
+                    id="SOLD" 
+                    name="radio_btn" 
+                    value="1" 
+                    onChange={radiocheck}
+                    check={detail.sellState === "SOLDOUT" ? true : false}/>
+                  <label htmlFor="SOLD">판매완료</label> <p />
+                </div>
+              </>
+              <StEditBtn>저장</StEditBtn>
+            </form>
+
             ) : (
               <div>
                 <ImgBox src={detail.image}></ImgBox>
@@ -291,9 +290,4 @@ const StdeleteBtn = styled.button`
   background-color: white;
   cursor: pointer;
   color: tomato;
-`;
-
-const StInput = styled.input`
-  font-family: "Jalnan";
-  margin-bottom: 20px;
 `;

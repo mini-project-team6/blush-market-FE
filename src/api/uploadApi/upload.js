@@ -10,7 +10,7 @@ const uploadPost = async(formData) => {
     return response;
   }
   catch{
-
+    alert("작성 오류입니다!");
   }
 }
 
