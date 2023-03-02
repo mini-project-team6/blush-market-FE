@@ -90,10 +90,10 @@ export default function DetailElement() {
     formData.append("content", updateContent);
     formData.append("file", file);
     formData.append("sellState", sellState);
+    console.log(file);
     const payload = {
       id: id,
       title: formData.get("title"),
-
       content: formData.get("content"),
       file: formData.get("file"),
       sellState: formData.get("sellState"),

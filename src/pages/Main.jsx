@@ -8,6 +8,8 @@ import {
   getBoardListByToggle,
 } from "../api/board/board";
 import ProductList from "../components/ProductList";
+import { instance } from "../api/axios";
+import axios from "axios";
 
 export default function Main() {
   const navigate = useNavigate();
@@ -76,6 +78,34 @@ export default function Main() {
     }
   };
 
+  //소셜 로그인
+
+  const social = async () => {
+    try {
+      const response = await axios.get(
+        `https://kauth.kakao.com/oauth/authorize`,
+        {
+          params: {
+            client_id: "67846cb341163af912b62f3c0feb8058",
+            redirect_uri: `${process.env.REACT_APP_SERVER_URL}/api/member/kakao/callback`,
+            response_type: "code",
+          },
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+          },
+        }
+      );
+
+      return response;
+    } catch {
+      return null;
+    }
+  };
+
+  const socialHandler = () => {
+    social().then((result) => console.log(result));
+  };
+
   if (isLoading) return <p>Loading...</p>;
 
   if (isError) return <p>{isError}</p>;
@@ -108,6 +138,8 @@ export default function Main() {
         .map((target, index) => {
           return <p key={index}>{target.title}</p>;
         })} */}
+      <button onClick={socialHandler}>소셜로그인</button>
+      <a href="">카카오</a>
     </StDiv>
   );
 }

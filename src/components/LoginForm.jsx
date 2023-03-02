@@ -74,6 +74,8 @@ export default function LoginForm() {
         onChange={(e) => setPassword(e.target.value)}
       />
       <button>로그인</button>
+
+      <button>소셜로그인</button>
     </StForm>
   );
 }
