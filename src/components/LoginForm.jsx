@@ -3,45 +3,33 @@ import styled from "styled-components";
 import { useMutation } from "react-query";
 import { postLogin } from "../api/signup/login";
 import { useNavigate } from "react-router-dom";
+
 export default function LoginForm() {
   const navigate = useNavigate();
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
 
-  //토큰 저장시 토큰의 유효 ㅕ기간도 같이 localstorage에 넣어야한다고함.
-  // const expire_token = (sec) => {
-  //   const now = new Date();
-  //   const expires_access_token = now.getTime() + sec * 1000;
-  //   const expires_refresh_token = now.getTime() + sec * 2000;
-
-  //   return [expires_access_token, expires_refresh_token];
-  // };
   const loginMutation = useMutation(postLogin, {
     onSuccess: (response) => {
-      console.log(response);
+      // console.log(response);
       if (response.headers.authorization) {
         localStorage.setItem(
           "access_token",
           response.headers.authorization.split(" ")[1]
-          //au~~ bar~~~ token
-          //bar~~ token
         );
         localStorage.setItem(
           "refresh_token",
           response.headers.refresh_token.split(" ")[1]
         );
-        // const [expires_access_token, expires_refresh_token] = expire_token(60);
-        // localStorage.setItem("access_token_expire", expires_access_token);
-        // localStorage.setItem("refresh_token_expire", expires_refresh_token);
-        alert("로그인 성공?");
+        alert("🥕 반갑습니다 🥕");
         window.location.href = "/";
       } else {
-        alert("로그인 실패?");
+        alert("다시 시도해주십시오.");
       }
     },
     onError: (response) => {
       console.log(response);
-      alert("로그인 에러??");
+      alert("이메일 또는 비밀번호를 확인해주세요!");
     },
   });
 
@@ -53,7 +41,7 @@ export default function LoginForm() {
     };
     console.log(obj);
     if (!id.trim() || !password.trim()) {
-      alert("똑바로 입력 하세요....");
+      alert("빈칸을 빠짐없이 입력해주세요!");
       return;
     }
 
@@ -62,18 +50,29 @@ export default function LoginForm() {
 
   return (
     <StForm onSubmit={loginSubmitHandler}>
-      <h1>로그인</h1>
-      <input
-        type="text" //
+      <StSignUplb>로그인</StSignUplb>
+      <StInput
+        type="text" 
+        placeholder="이메일을 입력하세요"
         value={id}
         onChange={(e) => setId(e.target.value)}
       />
-      <input
+      <StInput
         type="password"
+        placeholder="비밀번호를 입력하세요"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <button>로그인</button>
+      <StSubmitBtn>
+        <StImg
+            style={{  width: "20px", height: "20px" }}
+            src={process.env.PUBLIC_URL + "/carrot_icon-icons.com_128.png"}
+        /> 로그인
+        <StImg
+          style={{  width: "20px", height: "20px" }}
+          src={process.env.PUBLIC_URL + "/carrot_icon-icons.com_128.png"}
+        />
+      </StSubmitBtn>
     </StForm>
   );
 }
@@ -85,4 +84,35 @@ const StForm = styled.form`
   align-items: center;
   flex-direction: column;
   gap: 20px;
+`;
+
+const StSignUplb= styled.label`
+  font-size: 30px;
+  margin-bottom: 20px;
+  font-family: "Jalnan";
+  color: black;
+`;
+
+const StInput = styled.input`
+  width : 350px;
+  height : 30px;
+  border-radius : 10px;
+  font-family: "Jalnan";
+  font-size : 12px;
+  padding: 10px;
+  border-color : #b2b2b2;
+`
+const StSubmitBtn= styled.button`
+  width : 300px;
+  height : 60px;
+  font-size: 20px;
+  font-family: "Jalnan";
+  border-radius : 10px;
+  background-color : tomato;
+  color: white;
+`;
+
+const StImg=styled.img`
+  padding-right : 10px;
+  padding-left : 10px;
 `;

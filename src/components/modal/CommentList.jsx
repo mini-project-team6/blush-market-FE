@@ -58,28 +58,19 @@ export default function CommentList() {
       <h1 style={{ textAlign: "center" }}>댓글</h1>
       {commentList?.map((item) => {
         return (
-          <div>
-            <p>
+          <StCommentDiv>
+              <p>
               {item.username} : {item.content}
-              <span>
+              </p>
+              <div>
                 {item.ismine ? (
-                  <button onClick={() => onDeleteComment(item.id)}>X</button>
+                  <StCommentDeleteBtn onClick={() => onDeleteComment(item.id)}>✖️</StCommentDeleteBtn>
                 ) : null}
-              </span>
-            </p>
-          </div>
+              </div>
+  
+          </StCommentDiv>
         );
       })}
-      <div>
-        {/* <div> {response} </div> */}
-        {/* {data?.map((i) => {
-          return (
-            <div key = {i.id}> 
-              <div> {i.content}</div>
-            </div>
-          )
-        })} */}
-      </div>
     </ScrollableDiv>
   );
 }
@@ -103,4 +94,17 @@ const ScrollableDiv = styled.div`
   }
 `;
 
-// const StCommentDiv =
+const StCommentDiv =styled.div`
+  justify-content : space-between;
+  display : flex;
+`
+
+const StCommentDeleteBtn =styled.button`
+  background-color : tomato;
+  border-radius : 5px;
+  border : none;
+  cursor: pointer;
+  color : white;
+  width: 30px;
+  height : 25px;
+`
