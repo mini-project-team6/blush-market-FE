@@ -83,10 +83,9 @@ export default function Main() {
       <StSecdiv>
         <StPostBtn onClick={btnGoToUpload}>게시글 업로드</StPostBtn>
         <div>
-          <StSellBtn onClick={() => btnSellorSoldout("SELL")}>판매중</StSellBtn>
-          <StSoldBtn onClick={() => btnSellorSoldout("SOULOUT")}>
-            판매완료
-          </StSoldBtn>
+        <StALLBtn onClick={() => {window.location.href = "/";}}>전체보기</StALLBtn>
+        <StSellBtn onClick={() => btnSellorSoldout("SELL")}>판매중</StSellBtn>
+        <StSoldBtn onClick={() => btnSellorSoldout("SOULOUT")}>판매완료</StSoldBtn>
         </div>
       </StSecdiv>
       <ProductList products={list} />
@@ -149,6 +148,18 @@ const StSecdiv = styled.div`
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
   /* gap : 500px; */
+`;
+
+const StALLBtn = styled.button`
+  width: 100px;
+  height: 40px;
+  font-size: 15px;
+  font-family: "Jalnan";
+  border-radius: 10px;
+  border-color: #0a75ad;
+  background-color: white;
+  cursor: pointer;
+  margin-left: 10px;
 `;
 
 const StSellBtn = styled.button`

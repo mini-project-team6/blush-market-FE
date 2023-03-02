@@ -32,6 +32,7 @@ const EditPost = async (payload) => {
     );
     return response;
   } catch {
+    alert("수정 오류입니다!");
     return null;
   }
 };
