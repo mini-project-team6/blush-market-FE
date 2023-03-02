@@ -23,12 +23,12 @@ export default function SignUpForm() {
   const signUpMutation = useMutation(postSignup, {
     onSuccess: (response) => {
       console.log(response);
-      alert("회원가입 성공?");
+      alert("🥕회원 가입에 성공하였습니다.🥕");
       navigate("/login");
     },
     onError: (response) => {
       console.log(response);
-      alert("뭔가 에러?");
+      alert("회원가입 오류입니다.");
     },
   });
 
