@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import CommentModal from "./modal/CommentModal";
 import { baseURL } from "../api/axios";
 import { getDetailPost, DeletePost, EditPost } from "../api/detail/getdetail";
-import useInput from "../hooks/useInput";
 
 export default function DetailElement() {
   const { id } = useParams();
-  // console.log(id);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -20,18 +18,12 @@ export default function DetailElement() {
   const [isEditMode, setIsEditMode] = useState(false);
   const [file, setFile] = useState("");
   const [sellState, setSellState] = useState("");
-<<<<<<< HEAD
- 
-=======
-
->>>>>>> 85a715df372ebd86ea4019c34825818a1dfc0295
   const fileInput = React.useRef(null);
 
   // 전체 조회
   useEffect(() => {
     const getDetailPost = async () => {
       const { data } = await baseURL.get(`/api/post/${id}`);
-      // console.log(data);
       return data.response;
     };
     getDetailPost().then((result) => setDetail(result));
@@ -46,8 +38,7 @@ export default function DetailElement() {
 
   const onDeleteBtnHandler = (id) => {
     DELETE_mutation.mutate(id);
-    // console.log(id);
-    alert("삭제 완료");
+    alert("삭제 완료!");
     navigate("/");
   };
 
@@ -96,12 +87,11 @@ export default function DetailElement() {
       setUpdateImg(updateImg);
       setFile(payload)
     
-    alert("수정 완료");
+    alert("수정 완료!");
     navigate("/");
   };
 
   const radiocheck = (e) => {
-    // console.log(e.target.value)
     setSellState(e.target.value);
   };
 
@@ -112,7 +102,6 @@ export default function DetailElement() {
     setUpdateImg(detail.image)
     setFile(detail.file)
     setSellState(detail.sellState)
-    // console.log(detail.image)
   };
 
   return (
@@ -125,13 +114,18 @@ export default function DetailElement() {
             <form onSubmit={onSubmitPostHandler} encType="multipart/form-data">
               <>
               <ImgBox src={updateImg} alt="image"/>
+              <div>
+              <p /><Stlb htmlFor="input-file">파일 업로드</Stlb> <p />
               <input
-                  name="imgUpload"
-                  type="file"
-                  accept="image/*"
-                  ref={fileInput}
-                  onChange={onImgPostHandler}
-                />
+                id="input-file"
+                name="imgUpload"
+                type="file"
+                accept="image/*"
+                ref={fileInput}
+                onChange={onImgPostHandler}
+                style={{display:"none"}}
+              />
+                </div>
                 <StTxtarea
                   type="text"
                   name="updateTitle"
@@ -155,40 +149,32 @@ export default function DetailElement() {
                     name="radio_btn" 
                     value="0" 
                     onChange={radiocheck} 
-                    required
-                    checked={detail.sellState === "SELL" ? true : false}/>
-                  <label htmlFor="SELL">판매중</label>
+                    check={detail.sellState === "SELL" ? true : false}/>
+                  <label htmlFor="SELL">판매중</label> 
                   <input 
                     type="radio" 
                     id="SOLD" 
                     name="radio_btn" 
                     value="1" 
                     onChange={radiocheck}
-                    required
-                    checked={detail.sellState === "SOLDOUT" ? true : false}/>
-                  <label htmlFor="SOLD">판매완료</label>
+                    check={detail.sellState === "SOLDOUT" ? true : false}/>
+                  <label htmlFor="SOLD">판매완료</label> <p />
                 </div>
               </>
-
-              <button size="medium" className="editbitn">
-                {" "}
-                저장{" "}
-              </button>
+              <StEditBtn>저장</StEditBtn>
             </form>
             ) : (
               <div>
                 <ImgBox src = {detail.image}></ImgBox>
-                <div>{detail.title}</div>
-                <div> {detail.content} </div>  
-                <p>
+                <StStateP>
                   {detail.sellState === "SELL" ? "판매중" : "판매완료"}
-<<<<<<< HEAD
-                </p>                
-=======
-                </p> 
->>>>>>> 85a715df372ebd86ea4019c34825818a1dfc0295
-                <button onClick={() => onDeleteBtnHandler(detail.id)}>삭제</button>
-              <button size ='medium' className="editbitn" onClick={EditMode} > 수정 </button>
+                </StStateP>
+                <StTitlediv> {detail.title} </StTitlediv>
+                <StContentediv> {detail.content} </StContentediv>  
+                <StdeleteBtn 
+                  onClick={() => onDeleteBtnHandler(detail.id)}
+                  >삭제</StdeleteBtn>
+                <StEditBtn size ='medium' className="editbitn" onClick={EditMode} > 수정 </StEditBtn>
               </div>
               )
           }        
@@ -196,12 +182,11 @@ export default function DetailElement() {
         ):(
           <>
             <ImgBox src = {detail.image}></ImgBox>
-            <div> {detail.title} </div>
-            <div> {detail.content} </div>  
-            <p>
+            <StStateP>
               {detail.sellState === "SELL" ? "판매중" : "판매완료"}
-            </p>
-
+            </StStateP>
+            <StTitlediv> {detail.title} </StTitlediv>
+            <StContentediv> {detail.content} </StContentediv>  
           </>
         )}
       </div>
@@ -211,29 +196,95 @@ export default function DetailElement() {
   );
 }
 
+
 const StDiv = styled.div`
   margin-top: 100px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  gap: 20px;
+  /* background-color : #ffe0da; */
+  font-family: "Jalnan";
 `;
+
 const STdiv = styled.div`
   width: 400px;
+  display: flex;
+  justify-content: center;
 `;
+
 const ImgBox = styled.img`
   width: 300px;
   height: 300px;
-  margin: 10px;
-  background: no-repeat center/100%;
-  background-size: cover;
+  margin: auto;
+  border : solid;
+  border-radius : 10px;
+  display: flex;
 `;
 
 const StTxtarea = styled.textarea`
-  margin: 20px 35px;
+  margin-bottom: 20px;
   height: 50px;
-  width: 46rem;
-  border-radius: 20px;
+  width: 400px;
+  border-radius: 10px;
+  border-color : tomato;
   padding: 10px;
+  font-family: "Jalnan";
 `;
+const Stlb = styled.label`
+  font-family: "Jalnan";
+  border-radius : 10px;
+  border : solid;
+  width : 100px;
+  padding: 10px;
+  border-color : tomato;
+  background-color: tomato;
+  color : white;
+  cursor: pointer;
+`
+const StTitlediv= styled.div`
+  font-size: 30px;
+  margin-bottom: 20px;
+  color: black;
+`;
+
+const StContentediv= styled.div`
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: #4b4b4b;
+`;
+
+const StStateP= styled.p`
+  font-size: 15px;
+  color: tomato;
+`;
+
+const StEditBtn= styled.button`
+  width : 80px;
+  height : 30px;
+  font-size: 15px;
+  font-family: "Jalnan";
+  border-radius : 10px;
+  border-color : #008000;
+  color : #008000;
+  background-color : white;
+  cursor: pointer;
+`;
+
+const StdeleteBtn= styled.button`
+  width : 80px;
+  height : 30px;
+  font-size: 15px;
+  font-family: "Jalnan";
+  border-radius : 10px;
+  border-color : tomato;
+  margin-right: 10px;
+  background-color : white;
+  cursor: pointer;
+  color : tomato;
+`;
+
+const StInput = styled.input`
+  font-family: "Jalnan";
+  margin-bottom: 20px;
+`

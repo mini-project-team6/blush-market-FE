@@ -61,37 +61,43 @@ const UploadForm = () => {
 
     mutation.mutate(formData);
 
-    alert("업로드 완료");
+    alert("업로드 완료!");
     navigate("/");
   };
 
   return (
     <form name='post' onSubmit={onSubmitPostHandler} encType="multipart/form-data">
       <StCard>
-        <label> Title </label>
-        <br />
-        <input type="text" value={newtitle} onChange={onTitleHandler} /> <br />
-        <label> Content </label> <br />
-        <input
+        <Stlabel>🥕 제목을 입력하세요 </Stlabel>
+        <StInput 
+        type="text" 
+        value={newtitle} 
+        onChange={onTitleHandler} 
+        style={{ height: "50px" }} /> <p />
+        <Stlabel> 🥕 제품 설명을 입력하세요 </Stlabel>
+        <StInput
           type="text"
           value={newcontent}
           onChange={onContentHandler}
+          style={{ height: "100px" }} 
         />
-        <br />
-        <StpicInput
+        <p />
+        <StsmallLabel> 제품 이미지를 올려주세요</StsmallLabel>
+        <StUploadlb htmlFor="input-file">이미지 파일 업로드</StUploadlb> <p />
+        <input
+          id="input-file"
           name="imgUpload"
           type="file"
           accept="image/*"
           ref={fileInput}
           onChange={onImgPostHandler}
-          // onClick={onImgButton}
+          style={{display:"none"}}
         />
-        {/* <StuploadBtn onClick={onImgButton}> 파일 업로드 </StuploadBtn> */}
         <div>
-          <ImgBox src={newimage} alt="img" />
+          <ImgBox src={newimage} alt="img"/>
         </div>
         <br />
-        <StupicBtn> 업로드 </StupicBtn>
+        <StPostBtn> 업로드 </StPostBtn>
       </StCard>
     </form>
   );
@@ -100,26 +106,66 @@ const UploadForm = () => {
 export default UploadForm;
 
 const StCard = styled.section`
-  background-color: #dadada;
-  display: block;
-  padding: 20px;
+  padding: 50px;
   margin: auto;
+  display : flex;
+  align-items: center;
+  flex-direction: column;
 `;
 
-const StupicBtn = styled.button`
-  height: 30px;
-  width: 100px;
-`;
-const StuploadBtn = styled.button`
-  height: 30px;
-  width: 100px;
-`;
-const StpicInput = styled.input`
-  height: 30px;
-  width: 200px;
-`;
 const ImgBox = styled.img`
-  width: 300px;
-  height: 200px;
-  margin: 10px;
+  min-width: 300px;
+  min-height: 300px;
+  max-width: 500px;
+  max-height: 500px;
+  background-color : #ebebeb;
+  align-items : center;
 `;
+
+const StInput = styled.textarea`
+  width : 400px;
+  border-radius : 10px;
+  font-family: "Jalnan";
+  font-size : 18px;
+  padding: 10px;
+  margin-top : 10px;
+  border-color : #b2b2b2;
+  background-color :#ebebeb;
+`
+
+const Stlabel= styled.label`
+  font-size: 20px;
+  font-family: "Jalnan";
+  color: black;
+`;
+
+const StsmallLabel= styled.label`
+  font-size: 15px;
+  font-family: "Jalnan";
+  color: #b2b2b2;
+  margin-bottom: 10px;
+`;
+
+const StPostBtn= styled.button`
+  width : 200px;
+  height : 50px;
+  font-size: 20px;
+  font-family: "Jalnan";
+  border-radius : 10px;
+  background-color : tomato;
+  border-color : tomato;
+  color: white;
+`;
+
+const StUploadlb = styled.label`
+  font-family: "Jalnan";
+  border-radius : 10px;
+  border : solid;
+  width : 200px;
+  padding: 10px;
+  text-align : center;
+  border-color : tomato;
+  background-color: tomato;
+  color : white;
+  cursor: pointer;
+`

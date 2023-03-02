@@ -23,7 +23,6 @@ export default function CommentModal() {
       <StDiv>
         <Button onClick={handleModalOpen}>댓글 달기</Button>
       </StDiv>
-
       {isModalOpen && (
         <ModalOverlay onClick={handleModalClose}>
           <ModalContent
@@ -44,7 +43,6 @@ const slideIn = keyframes`
   from {
     transform: translateY(100%);
   }
-
   to {
     transform: translateY(0%);
   }
@@ -54,7 +52,6 @@ const slideOut = keyframes`
   from {
     transform: translateY(0%);
   }
-
   to {
     transform: translateY(100%);
   }
@@ -67,7 +64,6 @@ const ModalOverlay = styled.div`
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.6);
-  /* background-color: tomato; */
   z-index: 100;
 `;
 
@@ -97,9 +93,11 @@ const CloseButton = styled.button`
   font-size: 1.2rem;
   cursor: pointer;
 `;
+
 const Button = styled.button`
   width: 500px;
   height: 40px;
+  font-family: "Jalnan";
   padding: 0.5rem 1rem;
   border: none;
   background-color: tomato;
@@ -110,7 +108,7 @@ const Button = styled.button`
 
   &:hover {
     transform: scale(1.2);
-    background-color: #4caf50;
+    background-color: #008000;
   }
 `;
 

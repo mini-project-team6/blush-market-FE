@@ -25,6 +25,8 @@ export default function Header() {
   const logoutHandler = () => {
     const refresh_token = localStorage.getItem("refresh_token");
     logoutMutation.mutate(refresh_token);
+    alert("로그아웃 하시겠습니까?");
+
   };
   return (
     <Stdiv>
@@ -37,12 +39,12 @@ export default function Header() {
           src={process.env.PUBLIC_URL + "/carrot_icon-icons.com_128.png"}
         />
       </StHomebtn>
-      <Stlb>홍당무 마켓</Stlb> <br />
+      <StHeaderLink to={"/"}>홍당무 마켓</StHeaderLink> <br />
       {!isLogin ? (
-        <Stdiv2>
-          <StyledLink to={"/login"}> 로그인</StyledLink>
-          <StyledLink to={"/signup"}> 회원가입</StyledLink>
-        </Stdiv2>
+        <StUserDiv>
+          <StLoginLink to={"/login"}>로그인</StLoginLink>
+          <StSignUpLink to={"/signup"}>회원가입</StSignUpLink>
+        </StUserDiv>
       ) : (
         <StHomebtn onClick={logoutHandler}>로그아웃</StHomebtn>
       )}
@@ -52,22 +54,28 @@ export default function Header() {
 const Stdiv = styled.div`
   display: flex;
   background-color: tomato;
-  padding: 10px;
+  padding: 20px;
+  align-items: center;
+  min-width: 600px;
 `;
-
-const Stlb = styled.label`
-  font-size: 30px;
-  margin: auto;
-  font-family: "Jalnan";
-`;
-const Stdiv2 = styled.div`
+const StUserDiv = styled.div`
   margin: 10px;
   gap: 50px;
 `;
 
+const StHeaderLink = styled(Link)`
+  font-size: 40px;
+  margin: auto;
+  padding-left : 7rem;
+  font-family: "Jalnan";
+  text-decoration: none;
+  color: black;
+`;
+
 const StHomebtn = styled.button`
   background-color: transparent;
-  border: none;
+  padding : 5px;
+  border : none;
   cursor: pointer;
   font-family: "Jalnan";
   font-size: 18px;
@@ -78,7 +86,16 @@ const StyledImage = styled.img`
   height: 40px;
 `;
 
-const StyledLink = styled(Link)`
+const StLoginLink = styled(Link)`
+  font-family: "Jalnan";
+  text-align: center;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 18px;
+  margin-right : 10px;
+`;
+
+const StSignUpLink = styled(Link)`
   font-family: "Jalnan";
   text-align: center;
   color: black;
