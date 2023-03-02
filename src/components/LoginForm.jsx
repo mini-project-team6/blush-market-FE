@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { useMutation } from "react-query";
 import { postLogin } from "../api/signup/login";
 import { useNavigate } from "react-router-dom";
-
 export default function LoginForm() {
   const navigate = useNavigate();
   const [id, setId] = useState("");
@@ -16,6 +15,8 @@ export default function LoginForm() {
         localStorage.setItem(
           "access_token",
           response.headers.authorization.split(" ")[1]
+          //au~~ bar~~~ token
+          //bar~~ token
         );
         localStorage.setItem(
           "refresh_token",
@@ -52,7 +53,7 @@ export default function LoginForm() {
     <StForm onSubmit={loginSubmitHandler}>
       <StSignUplb>로그인</StSignUplb>
       <StInput
-        type="text" 
+        type="text"
         placeholder="이메일을 입력하세요"
         value={id}
         onChange={(e) => setId(e.target.value)}
@@ -65,11 +66,12 @@ export default function LoginForm() {
       />
       <StSubmitBtn>
         <StImg
-            style={{  width: "20px", height: "20px" }}
-            src={process.env.PUBLIC_URL + "/carrot_icon-icons.com_128.png"}
-        /> 로그인
+          style={{ width: "20px", height: "20px" }}
+          src={process.env.PUBLIC_URL + "/carrot_icon-icons.com_128.png"}
+        />{" "}
+        로그인
         <StImg
-          style={{  width: "20px", height: "20px" }}
+          style={{ width: "20px", height: "20px" }}
           src={process.env.PUBLIC_URL + "/carrot_icon-icons.com_128.png"}
         />
       </StSubmitBtn>
@@ -86,7 +88,7 @@ const StForm = styled.form`
   gap: 20px;
 `;
 
-const StSignUplb= styled.label`
+const StSignUplb = styled.label`
   font-size: 30px;
   margin-bottom: 20px;
   font-family: "Jalnan";
@@ -94,25 +96,25 @@ const StSignUplb= styled.label`
 `;
 
 const StInput = styled.input`
-  width : 350px;
-  height : 30px;
-  border-radius : 10px;
+  width: 350px;
+  height: 30px;
+  border-radius: 10px;
   font-family: "Jalnan";
-  font-size : 12px;
+  font-size: 12px;
   padding: 10px;
-  border-color : #b2b2b2;
-`
-const StSubmitBtn= styled.button`
-  width : 300px;
-  height : 60px;
+  border-color: #b2b2b2;
+`;
+const StSubmitBtn = styled.button`
+  width: 300px;
+  height: 60px;
   font-size: 20px;
   font-family: "Jalnan";
-  border-radius : 10px;
-  background-color : tomato;
+  border-radius: 10px;
+  background-color: tomato;
   color: white;
 `;
 
-const StImg=styled.img`
-  padding-right : 10px;
-  padding-left : 10px;
+const StImg = styled.img`
+  padding-right: 10px;
+  padding-left: 10px;
 `;

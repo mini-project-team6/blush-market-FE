@@ -27,7 +27,7 @@ export default function DetailElement() {
       return data.response;
     };
     getDetailPost().then((result) => setDetail(result));
-  },[id]);
+  }, [id]);
 
   //삭제
   const DELETE_mutation = useMutation(DeletePost, {
@@ -51,17 +51,17 @@ export default function DetailElement() {
 
   const onImgPostHandler = (event) => {
     setUpdateImg([]);
-      setFile(event.target.files[0]);
+    setFile(event.target.files[0]);
 
-      let reader = new FileReader();
-      reader.readAsDataURL(event.target.files[0]);
-      reader.onloadend = () => {
-        const base = reader.result;
-        if (base) {
-          const baseSub = base.toString();
-          setUpdateImg((updateImg) => [...updateImg, baseSub]);
-        }
-      };
+    let reader = new FileReader();
+    reader.readAsDataURL(event.target.files[0]);
+    reader.onloadend = () => {
+      const base = reader.result;
+      if (base) {
+        const baseSub = base.toString();
+        setUpdateImg((updateImg) => [...updateImg, baseSub]);
+      }
+    };
   };
 
   const onSubmitPostHandler = async (event) => {
@@ -73,39 +73,37 @@ export default function DetailElement() {
       return alert("사진을 다시 올려주세요!");
     }
     const formData = new FormData();
-  
-      formData.append("title", updateTitle);
-      formData.append("content", updateContent);
-      formData.append("file", file);
-      formData.append("sellState", sellState);
-      const payload = {
-        id : id,
-        title: formData.get("title"),
-        content : formData.get("content"),
-        file : formData.get("file"),
-        sellState : formData.get("sellState"),
-      }
-      Edit_Mutation.mutate(payload);
-      setDetail(payload);
-      setUpdateImg(updateImg);
-      setFile(payload)
-    
-    alert("수정 완료!");
-    navigate("/");
+
+    formData.append("title", updateTitle);
+    formData.append("content", updateContent);
+    formData.append("file", file);
+    formData.append("sellState", sellState);
+    const payload = {
+      id: id,
+      title: formData.get("title"),
+      content: formData.get("content"),
+      file: formData.get("file"),
+      sellState: formData.get("sellState"),
+    };
+    Edit_Mutation.mutate(payload);
+    setDetail(payload.formData);
+
+    alert("수정 완료");
+    navigate(`/detail/${payload.id}`);
   };
 
   const radiocheck = (e) => {
     setSellState(e.target.value);
   };
 
-  function EditMode () {
-    setIsEditMode(true)
-    setUpdateTitle(detail.title)
-    setUpdateContent(detail.content)
-    setUpdateImg(detail.image)
-    setFile(detail.file)
-    setSellState(detail.sellState)
-  };
+  function EditMode() {
+    setIsEditMode(true);
+    setUpdateTitle(detail.title);
+    setUpdateContent(detail.content);
+    setUpdateImg(detail.image);
+    setFile(detail.file);
+    setSellState(detail.sellState);
+  }
 
   return (
     <StDiv>
@@ -167,30 +165,37 @@ export default function DetailElement() {
               </>
               <StEditBtn>저장</StEditBtn>
             </form>
+
             ) : (
               <div>
-                <ImgBox src = {detail.image}></ImgBox>
+                <ImgBox src={detail.image}></ImgBox>
                 <StStateP>
                   {detail.sellState === "SELL" ? "판매중" : "판매완료"}
                 </StStateP>
                 <StTitlediv> {detail.title} </StTitlediv>
-                <StContentediv> {detail.content} </StContentediv>  
-                <StdeleteBtn 
-                  onClick={() => onDeleteBtnHandler(detail.id)}
-                  >삭제</StdeleteBtn>
-                <StEditBtn size ='medium' className="editbitn" onClick={EditMode} > 수정 </StEditBtn>
+                <StContentediv> {detail.content} </StContentediv>
+                <StdeleteBtn onClick={() => onDeleteBtnHandler(detail.id)}>
+                  삭제
+                </StdeleteBtn>
+                <StEditBtn
+                  size="medium"
+                  className="editbitn"
+                  onClick={EditMode}
+                >
+                  {" "}
+                  수정{" "}
+                </StEditBtn>
               </div>
-              )
-          }        
-        </STdiv>
-        ):(
+            )}
+          </STdiv>
+        ) : (
           <>
-            <ImgBox src = {detail.image}></ImgBox>
+            <ImgBox src={detail.image}></ImgBox>
             <StStateP>
               {detail.sellState === "SELL" ? "판매중" : "판매완료"}
             </StStateP>
             <StTitlediv> {detail.title} </StTitlediv>
-            <StContentediv> {detail.content} </StContentediv>  
+            <StContentediv> {detail.content} </StContentediv>
           </>
         )}
       </div>
@@ -199,7 +204,6 @@ export default function DetailElement() {
     </StDiv>
   );
 }
-
 
 const StDiv = styled.div`
   margin-top: 100px;
@@ -221,8 +225,8 @@ const ImgBox = styled.img`
   width: 300px;
   height: 300px;
   margin: auto;
-  border : solid;
-  border-radius : 10px;
+  border: solid;
+  border-radius: 10px;
   display: flex;
 `;
 
@@ -231,59 +235,59 @@ const StTxtarea = styled.textarea`
   height: 50px;
   width: 400px;
   border-radius: 10px;
-  border-color : tomato;
+  border-color: tomato;
   padding: 10px;
   font-family: "Jalnan";
 `;
 const Stlb = styled.label`
   font-family: "Jalnan";
-  border-radius : 10px;
-  border : solid;
-  width : 100px;
+  border-radius: 10px;
+  border: solid;
+  width: 100px;
   padding: 10px;
-  border-color : tomato;
+  border-color: tomato;
   background-color: tomato;
-  color : white;
+  color: white;
   cursor: pointer;
-`
-const StTitlediv= styled.div`
+`;
+const StTitlediv = styled.div`
   font-size: 30px;
   margin-bottom: 20px;
   color: black;
 `;
 
-const StContentediv= styled.div`
+const StContentediv = styled.div`
   font-size: 20px;
   margin-bottom: 20px;
   color: #4b4b4b;
 `;
 
-const StStateP= styled.p`
+const StStateP = styled.p`
   font-size: 15px;
   color: tomato;
 `;
 
-const StEditBtn= styled.button`
-  width : 80px;
-  height : 30px;
+const StEditBtn = styled.button`
+  width: 80px;
+  height: 30px;
   font-size: 15px;
   font-family: "Jalnan";
-  border-radius : 10px;
-  border-color : #008000;
-  color : #008000;
-  background-color : white;
+  border-radius: 10px;
+  border-color: #008000;
+  color: #008000;
+  background-color: white;
   cursor: pointer;
 `;
 
-const StdeleteBtn= styled.button`
-  width : 80px;
-  height : 30px;
+const StdeleteBtn = styled.button`
+  width: 80px;
+  height: 30px;
   font-size: 15px;
   font-family: "Jalnan";
-  border-radius : 10px;
-  border-color : tomato;
+  border-radius: 10px;
+  border-color: tomato;
   margin-right: 10px;
-  background-color : white;
+  background-color: white;
   cursor: pointer;
-  color : tomato;
+  color: tomato;
 `;

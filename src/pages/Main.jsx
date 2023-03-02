@@ -8,6 +8,8 @@ import {
   getBoardListByToggle,
 } from "../api/board/board";
 import ProductList from "../components/ProductList";
+import { instance } from "../api/axios";
+import axios from "axios";
 
 export default function Main() {
   const navigate = useNavigate();
@@ -72,7 +74,7 @@ export default function Main() {
       <div>
         <StInput
           type="text"
-          placeholder = "🥕 검색하고자 하는 키워드를 입력하세요."
+          placeholder="🥕 검색하고자 하는 키워드를 입력하세요."
           value={searchTitle}
           onChange={searchTitleChangeHandler}
         />
@@ -81,7 +83,7 @@ export default function Main() {
       <StSecdiv>
         <StPostBtn onClick={btnGoToUpload}>게시글 업로드</StPostBtn>
         <div>
-        <StSellBtn onClick={() => {window.location.href = "/";}}>전체보기</StSellBtn>
+        <StALLBtn onClick={() => {window.location.href = "/";}}>전체보기</StALLBtn>
         <StSellBtn onClick={() => btnSellorSoldout("SELL")}>판매중</StSellBtn>
         <StSoldBtn onClick={() => btnSellorSoldout("SOULOUT")}>판매완료</StSoldBtn>
         </div>
@@ -102,72 +104,84 @@ const StDiv = styled.div`
   font-family: "Jalnan";
 `;
 
-const StSearchBtn= styled.button`
-  width : 80px;
-  height : 40px;
+const StSearchBtn = styled.button`
+  width: 80px;
+  height: 40px;
   font-size: 15px;
   font-family: "Jalnan";
-  border-radius : 10px;
-  background-color : tomato;
-  border-color : tomato;
+  border-radius: 10px;
+  background-color: tomato;
+  border-color: tomato;
   cursor: pointer;
   color: white;
   margin-left: 10px;
 `;
 
-const StPostBtn= styled.button`
-  width : 150px;
-  height : 40px;
+const StPostBtn = styled.button`
+  width: 150px;
+  height: 40px;
   font-size: 15px;
   font-family: "Jalnan";
-  border-radius : 10px;
-  border-color : #008000;
-  background-color : #008000;
+  border-radius: 10px;
+  border-color: #008000;
+  background-color: #008000;
   cursor: pointer;
   color: white;
   margin-left: 10px;
 `;
 
 const StInput = styled.input`
-  width : 350px;
-  height : 20px;
-  border-radius : 10px;
+  width: 350px;
+  height: 20px;
+  border-radius: 10px;
   font-family: "Jalnan";
-  font-size : 12px;
+  font-size: 12px;
   padding: 10px;
-  border-color : #b2b2b2;
-`
+  border-color: #b2b2b2;
+`;
 
 const StSecdiv = styled.div`
   min-width: 800px;
   display: flex;
-  justify-content : space-between; 
+  justify-content: space-between;
   text-align: center;
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
   /* gap : 500px; */
 `;
 
-const StSellBtn= styled.button`
-  width : 100px;
-  height : 40px;
+const StALLBtn = styled.button`
+  width: 100px;
+  height: 40px;
   font-size: 15px;
   font-family: "Jalnan";
-  border-radius : 10px;
-  border-color : #008000;
-  background-color : white;
+  border-radius: 10px;
+  border-color: #0a75ad;
+  background-color: white;
   cursor: pointer;
   margin-left: 10px;
 `;
 
-const StSoldBtn= styled.button`
-  width : 100px;
-  height : 40px;
+const StSellBtn = styled.button`
+  width: 100px;
+  height: 40px;
   font-size: 15px;
   font-family: "Jalnan";
-  border-radius : 10px;
-  border-color : tomato;
-  background-color : white;
+  border-radius: 10px;
+  border-color: #008000;
+  background-color: white;
+  cursor: pointer;
+  margin-left: 10px;
+`;
+
+const StSoldBtn = styled.button`
+  width: 100px;
+  height: 40px;
+  font-size: 15px;
+  font-family: "Jalnan";
+  border-radius: 10px;
+  border-color: tomato;
+  background-color: white;
   cursor: pointer;
   margin-left: 10px;
 `;
