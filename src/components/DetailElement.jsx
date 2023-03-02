@@ -86,10 +86,12 @@ export default function DetailElement() {
       sellState: formData.get("sellState"),
     };
     Edit_Mutation.mutate(payload);
-    setDetail(payload.formData);
+    setDetail(payload);
+    setUpdateImg(updateImg);
+    setFile(payload);
 
-    alert("수정 완료");
-    navigate(`/detail/${payload.id}`);
+    alert("수정 완료!");
+    navigate("/");
   };
 
   const radiocheck = (e) => {
