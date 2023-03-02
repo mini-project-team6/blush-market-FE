@@ -2,7 +2,8 @@ import { baseURL } from "../axios";
 
 const getDetailPost = async () => {
   const response = await baseURL.get("/api/post");
-  return response.data;
+  console.log(response)
+  return response;
 };
 
 const DeletePost = async (id) => {
