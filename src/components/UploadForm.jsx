@@ -48,8 +48,8 @@ const UploadForm = () => {
 
   const onSubmitPostHandler = async (event) => {
     event.preventDefault();
-    if (newtitle.trim() === "" || newcontent.trim() === "" ) {
-      return alert("빈칸을 채워주세요");
+    if (newtitle.trim() === "" || newcontent.trim() === "" || !file ) {
+      return alert("제품 정보를 모두 채워주세요!");
     } 
 
     const formData = new FormData();

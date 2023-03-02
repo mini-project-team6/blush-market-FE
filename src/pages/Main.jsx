@@ -81,6 +81,7 @@ export default function Main() {
       <StSecdiv>
         <StPostBtn onClick={btnGoToUpload}>게시글 업로드</StPostBtn>
         <div>
+        <StSellBtn onClick={() => {window.location.href = "/";}}>전체보기</StSellBtn>
         <StSellBtn onClick={() => btnSellorSoldout("SELL")}>판매중</StSellBtn>
         <StSoldBtn onClick={() => btnSellorSoldout("SOULOUT")}>판매완료</StSoldBtn>
         </div>

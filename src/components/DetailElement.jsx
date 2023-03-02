@@ -66,8 +66,11 @@ export default function DetailElement() {
 
   const onSubmitPostHandler = async (event) => {
     event.preventDefault();
-    if (updateTitle.trim() === "" || updateContent.trim() === "" ) {
+    if (updateTitle.trim() === "" || updateContent.trim() === "") {
       return alert("빈칸을 채워주세요");
+    }
+    else if (!file) {
+      return alert("사진을 다시 올려주세요!");
     }
     const formData = new FormData();
   
@@ -122,6 +125,7 @@ export default function DetailElement() {
                 type="file"
                 accept="image/*"
                 ref={fileInput}
+                src={file}
                 onChange={onImgPostHandler}
                 style={{display:"none"}}
               />
@@ -283,8 +287,3 @@ const StdeleteBtn= styled.button`
   cursor: pointer;
   color : tomato;
 `;
-
-const StInput = styled.input`
-  font-family: "Jalnan";
-  margin-bottom: 20px;
-`
