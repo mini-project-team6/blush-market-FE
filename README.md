@@ -13,8 +13,8 @@ react + spring 거래 포스팅 사이트
     yarn install
 
 # 👤 FE STACK
-#61DAFB REACT
-#FF4154 REACT QUERY
+#61DAFB
+#FF4154
 
 # 📝 주요기능
 - 회원가입
