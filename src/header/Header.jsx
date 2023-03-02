@@ -25,39 +25,80 @@ export default function Header() {
   const logoutHandler = () => {
     const refresh_token = localStorage.getItem("refresh_token");
     logoutMutation.mutate(refresh_token);
+    alert("로그아웃 하시겠습니까?");
+
   };
   return (
     <Stdiv>
-      <button
+      <StHomebtn
         onClick={() => {
           window.location.href = "/";
         }}
       >
-        {" "}
-        Main{" "}
-      </button>
-      <Stlb>header</Stlb> <br />
+        <StyledImage
+          src={process.env.PUBLIC_URL + "/carrot_icon-icons.com_128.png"}
+        />
+      </StHomebtn>
+      <StHeaderLink to={"/"}>홍당무 마켓</StHeaderLink> <br />
       {!isLogin ? (
-        <Stdiv2>
-          <Link to={"/login"}> 로그인</Link>
-          <Link to={"/signup"}> 회원가입</Link>
-        </Stdiv2>
+        <StUserDiv>
+          <StLoginLink to={"/login"}>로그인</StLoginLink>
+          <StSignUpLink to={"/signup"}>회원가입</StSignUpLink>
+        </StUserDiv>
       ) : (
-        <button onClick={logoutHandler}>로그아웃</button>
+        <StHomebtn onClick={logoutHandler}>로그아웃</StHomebtn>
       )}
     </Stdiv>
   );
 }
 const Stdiv = styled.div`
   display: flex;
-  background-color: #e9e9e9;
-  padding: 10px;
+  background-color: tomato;
+  padding: 20px;
+  align-items: center;
+  min-width: 600px;
+`;
+const StUserDiv = styled.div`
+  margin: 10px;
+  gap: 50px;
 `;
 
-const Stlb = styled.label`
-  font-size: 20px;
+const StHeaderLink = styled(Link)`
+  font-size: 40px;
   margin: auto;
+  padding-left : 7rem;
+  font-family: "Jalnan";
+  text-decoration: none;
+  color: black;
 `;
-const Stdiv2 = styled.div`
-  gap: 50px;
+
+const StHomebtn = styled.button`
+  background-color: transparent;
+  padding : 5px;
+  border : none;
+  cursor: pointer;
+  font-family: "Jalnan";
+  font-size: 18px;
+`;
+
+const StyledImage = styled.img`
+  width: 40px;
+  height: 40px;
+`;
+
+const StLoginLink = styled(Link)`
+  font-family: "Jalnan";
+  text-align: center;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 18px;
+  margin-right : 10px;
+`;
+
+const StSignUpLink = styled(Link)`
+  font-family: "Jalnan";
+  text-align: center;
+  color: black;
+  text-decoration: none;
+  font-size: 18px;
 `;

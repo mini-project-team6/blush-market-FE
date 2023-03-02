@@ -33,12 +33,6 @@ export default function CommentModalContent() {
       <CommentList />
       <Footer>
         <CommentModalForm onSubmit={handleSubmit}>
-          {/* <CommentInput
-            type="text"
-            placeholder="이름"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          /> */}
           <CommentInput
             type="text"
             placeholder="댓글을 입력하세요"
@@ -75,13 +69,17 @@ const CommentInput = styled.input`
   margin-right: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 5px;
+  margin-bottom : 20px;
+  font-family: "Jalnan";
 `;
 
 const SubmitButton = styled.button`
   padding: 0.5rem 1rem;
-  background-color: #007aff;
+  font-family: "Jalnan";
+  background-color: #008000;
   color: white;
   border: none;
   border-radius: 5px;
+  margin-bottom : 20px;
   cursor: pointer;
 `;
